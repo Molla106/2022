@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2022 개정 수학과 성취기준</title>
+    <!-- 화면 캡처를 위한 html2canvas 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+
+        /* 1단계 탭 메뉴 스타일 (Title 선택) */
+        .tab-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #e2e8f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 2단계 영역(Sub Tab) 메뉴 스타일 */
+        .sub-tab-menu {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-btn {
+            padding: 7px 14px;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .sub-tab-btn.active {
+            background-color: #0f172a;
+            color: white;
+            border-color: #0f172a;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* 모드 전환 버튼 (시험 페이지 내부) */
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+
+        .mode-btn {
+            padding: 6px 14px;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .mode-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .memory-overview {
+            display: none;
+            margin-bottom: 20px;
+            padding: 18px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .memory-overview.active {
+            display: block;
+        }
+
+        .memory-overview h3 {
+            margin: 0 0 14px;
+            color: var(--primary-color);
+            font-size: 1.05rem;
+        }
+
+        .memory-overview-section {
+            margin-top: 14px;
+        }
+
+        .memory-overview-section:first-of-type {
+            margin-top: 0;
+        }
+
+        .memory-overview-section h4 {
+            margin: 0 0 6px;
+            font-size: 0.98rem;
+            color: #334155;
+        }
+
+        .memory-overview-item {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+
+        .memory-overview-index {
+            display: inline-block;
+            min-width: 28px;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        .practice-section, .exam-section {
+            display: none;
+        }
+
+        .practice-section.active, .exam-section.active {
+            display: block;
+        }
+
+        /* 이미지 페이지 스타일 */
+        .image-page-container {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .image-page-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-top: 15px;
+        }
+
+        .image-desc {
+            font-size: 1rem;
+            color: #475569;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        /* 중간 분류 제목 스타일 */
+        .subsection-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #0284c7;
+            margin: 20px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #bae6fd;
+        }
+
+        /* 문제 박스 레이아웃 */
+        .question-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .question-index {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #334155;
+            min-width: 45px;
+            padding-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .question-body {
+            flex-grow: 1;
+        }
+
+        textarea.user-input {
+            width: 100%;
+            height: 75px;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        textarea.user-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .btn-group {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            background-color: #0284c7;
+        }
+
+        .toggle-ans-btn {
+            background-color: #64748b;
+            color: white;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            display: none;
+        }
+
+        .toggle-ans-btn:hover {
+            background-color: #475569;
+        }
+
+        /* 시험 모드 하단 버튼 영역 */
+        .exam-submit-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .exam-submit-btn {
+            background-color: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.05rem;
+            flex-grow: 1;
+        }
+
+        .exam-submit-btn:hover {
+            background-color: #059669;
+        }
+
+        .capture-btn {
+            background-color: #6366f1;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .capture-btn:hover {
+            background-color: #4f46e5;
+        }
+
+        /* 결과 비교 영역 */
+        .result-container {
+            margin-top: 12px;
+            display: none;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            grid-template-columns: auto 1fr;
+            gap: 6px 8px;
+            align-items: baseline;
+        }
+
+        .result-label {
+            font-weight: bold;
+            color: #64748b;
+            white-space: nowrap;
+        }
+
+        .ans-label {
+            padding-left: 3.5px; 
+        }
+
+        .result-text {
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        .char-correct {
+            color: #059669;
+        }
+
+        .char-incorrect {
+            color: #dc2626;
+            background-color: #fee2e2;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="captureArea">
+    <h1>2022 개정 수학과 성취기준</h1>
+
+    <!-- 1단계 Title 탭 메뉴 (자동 생성됨) -->
+    <div class="tab-menu" id="tabMenu"></div>
+
+    <!-- 1단계 Title별 컨텐츠 내용 (자동 생성됨) -->
+    <div id="tabContentContainer"></div>
+</div>
+
+<script>
+    // ==========================================
+    // 📚 [암기 데이터 관리 영역 (다중 영역 & 페이지 타입 지원)]
+    // type: "exam" -> 타이핑 시험 페이지
+    // type: "image" -> 이미지 첨부 학습 페이지
+    // ==========================================
+    const studyData = {
+        tab1: {
+            title: "수와 연산",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "수와 연산 내용체계 표",
+                    imageUrl: "1.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "수와 연산 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 소인수분해",
+                            questions: [
+                                { index: "[9수01-01]", answer: "소인수분해의 뜻을 알고, 자연수를 소인수분해 할 수 있다. " },
+                                { index: "[9수01-02]", answer: "소인수분해를 이용하여 최대공약수와 최소공배수를 구할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 정수와 유리수",
+                            questions: [
+                                { index: "[9수01-03]", answer: "다양한 상황을 이용하여 음수의 필요성을 인식하고, 양수와 음수, 정수와 유리수의 개념을 이해한다." },
+                                { index: "[9수01-04]", answer: "정수와 유리수의 대소 관계를 판단할 수 있다." },
+                                { index: "[9수01-05]", answer: "정수와 유리수의 사칙계산의 원리를 이해하고, 그 계산을 할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 유리수와 순환소수",
+                            questions: [
+                                { index: "[9수01-06]", answer: "순환소수의 뜻을 알고, 유리수와 순환소수의 관계를 설명할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "4. 제곱근과 실수",
+                            questions: [
+                                { index: "[9수01-07]", answer: "제곱근의 뜻과 성질을 알고, 제곱근의 대소 관계를 판단할 수 있다." },
+                                { index: "[9수01-08]", answer: "무리수의 개념을 이해하고, 무리수의 유용성을 인식할 수 있다." },
+                                { index: "[9수01-09]", answer: "실수의 대소 관계를 판단하고 설명할 수 있다." },
+                                { index: "[9수01-10]", answer: "근호를 포함한 식의 사칙계산의 원리를 이해하고, 그 계산을 할 수 있다."},
+                            ]
+                        }
+                    ]
+                },
+{
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "수와 연산 성취기준 해설",
+                    subsections: [
+                        {
+                            subTitle: "수와 연산 성취기준 해설",
+                            questions: [
+                                { index: "[9수01-02]", answer: "초등학교에서 학습한 최대공약수와 최소공배수의 개념을 바탕으로 소인수분해를 이용하여 최대공약수와 최소공배수를 구하게 한다. 최대공약수와 최소공배수는 자연수의 소인수분해를 이용하는 범위에서 다루고, 최대공약수와 최소공배수의 활용 문제는 다루지 않는다." },
+                                { index: "[9수01-05]", answer: "정수의 사칙계산의 원리는 여러 가지 모델을 이용하여 직관적으로 이해하게 하고, 실생활에서 사칙계산의 유용성을 인식하게 한다." },
+                                { index: "[9수01-06]", answer: "순환소수를 분수로 고치는 것은 순환소수가 유리수임을 이해할 수 있는 정도로 다룬다. 유한소수를 순환소수로 나타내는 것은 다루지 않는다." },
+                                { index: "[9수01-08]", answer: "실생활에서 사용되는 무리수의 예를 찾아보는 활동을 통해 무리수의 필요성과 유용성을 인식하게 한다. 실수는 유리수와 무리수로 이루어짐을 이해하게 하고, 수 체계의 논리적인 아름다움에 관심을 갖게 한다." },
+                            ]
+                        },
+                        {
+                            subTitle: "수와 연산 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘수와 연산’ 영역에서는 용어와 기호로 ‘소수, 합성수, 거듭제곱, 지수, 밑, 소인수, 소인수분해, 서로소, 양수, 음수, 양의 정수, 음의 정수, 정수, 수직선, 양의 유리수, 음의 유리수, 유리수, 절댓값, 교환법칙, 결합법칙, 분배법칙, 역수, 유한소수, 무한소수, 순환소수, 순환마디, 제곱근, 근호, 무리수, 실수, 분모의 유리화, 양의 부호(+), 음의 부호(-), | |, ≤, ≥, 순환소수 표현, √’를 다룬다." },
+                                { index: "2.", answer: "정수와 유리수의 사칙계산의 원리를 이용하는 문제를 해결하기 위해 더 나은 계산 방법을 끈기 있게 찾아보게 하고, 풀이 과정과 결과를 반성하는 태도를 갖게 한다." },
+                                { index: "3.", answer: "제곱근과 무리수는 피타고라스 정리를 이용하여 도입할 수 있다." },
+                                { index: "4.", answer: "한 변의 길이가 1인 정사각형의 대각선의 길이 등을 이용하여 무리수의 존재를 직관적으로 이해하게 한다." },
+                                { index: "5.", answer: "제곱근의 값은 계산기 등을 이용하여 구할 수 있음을 알게 한다." },
+                                { index: "6.", answer: "정수, 유리수와 관련하여 지나치게 복잡한 계산을 포함하는 문제는 다루지 않는다." },
+                                { index: "7.", answer: "사칙계산 이외의 이항연산 문제는 다루지 않는다."},
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        tab2: {
+            title: "변화와 관계",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "변화와 관계 내용체계 표",
+                    imageUrl: "2.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "변화와 관계 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "",
+                            questions: [
+                                { index: "(가)", answer: "(가) 수학과 교육과정에 제시된 성격, 목표, 내용 체계, 성취기준, 평가와 일관성을 가지도록 교수⋅학습을 운영한다." },
+                                { index: "(나)", answer: "(나) 핵심 아이디어를 중심으로 수학의 지식⋅이해, 과정⋅기능, 가치⋅태도를 통합적으로 교수⋅학습하여 수학 교과 역량을 함양하고 수리 소양을 갖추게 한다." }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        tab3: {
+            title: "도형과 측정",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "도형과 측정 내용체계 표",
+                    imageUrl: "3.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "도형과 측정 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "",
+                            questions: [
+                                { index: "(가)", answer: "(가) 수학과 교육과정에 제시된 성격, 목표, 내용 체계, 성취기준, 평가와 일관성을 가지도록 교수⋅학습을 운영한다." },
+                                { index: "(나)", answer: "(나) 핵심 아이디어를 중심으로 수학의 지식⋅이해, 과정⋅기능, 가치⋅태도를 통합적으로 교수⋅학습하여 수학 교과 역량을 함양하고 수리 소양을 갖추게 한다." }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        tab4: {
+            title: "자료와 가능성",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "자료와 가능성 내용체계 표",
+                    imageUrl: "4.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "자료와 가능성 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "",
+                            questions: [
+                                { index: "(가)", answer: "(가) 수학과 교육과정에 제시된 성격, 목표, 내용 체계, 성취기준, 평가와 일관성을 가지도록 교수⋅학습을 운영한다." },
+                                { index: "(나)", answer: "(나) 핵심 아이디어를 중심으로 수학의 지식⋅이해, 과정⋅기능, 가치⋅태도를 통합적으로 교수⋅학습하여 수학 교과 역량을 함양하고 수리 소양을 갖추게 한다." }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+    };
+
+    // 화면 초기화 및 자동 렌더링
+    window.addEventListener('DOMContentLoaded', () => {
+        const tabMenu = document.getElementById('tabMenu');
+        const container = document.getElementById('tabContentContainer');
+
+        let isFirstTab = true;
+
+        for (const [tabKey, tabVal] of Object.entries(studyData)) {
+            // 1. 1단계 Title 탭 버튼 생성
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${isFirstTab ? 'active' : ''}`;
+            btn.textContent = tabVal.title;
+            btn.onclick = (e) => switchTab(e, tabKey);
+            tabMenu.appendChild(btn);
+
+            // 2. 1단계 Title 컨텐츠 박스 생성
+            const tabDiv = document.createElement('div');
+            tabDiv.id = tabKey;
+            tabDiv.className = `tab-content ${isFirstTab ? 'active' : ''}`;
+
+            // 2단계 영역(Sub Tab) 메뉴바 생성
+            const subMenuDiv = document.createElement('div');
+            subMenuDiv.className = 'sub-tab-menu';
+            tabDiv.appendChild(subMenuDiv);
+
+            // 2단계 영역별 페이지 컨테이너 생성 영역
+            const pageContainerDiv = document.createElement('div');
+            tabDiv.appendChild(pageContainerDiv);
+
+            tabVal.pages.forEach((page, pageIdx) => {
+                const pageId = `${tabKey}_page${pageIdx}`;
+                
+                // 서브 탭 버튼 생성
+                const subBtn = document.createElement('button');
+                subBtn.className = `sub-tab-btn ${pageIdx === 0 ? 'active' : ''}`;
+                subBtn.textContent = page.pageName;
+                subBtn.onclick = (e) => switchSubTab(e, tabKey, pageId);
+                subMenuDiv.appendChild(subBtn);
+
+                // 페이지 섹션 생성
+                const pageSec = document.createElement('div');
+                pageSec.id = pageId;
+                pageSec.className = `page-section ${pageIdx === 0 ? 'active' : ''}`;
+
+                if (page.type === 'image') {
+                    // 이미지 첨부 페이지 렌더링
+                    pageSec.innerHTML = `
+                        <div class="image-page-container">
+                            <div class="image-desc">${page.description}</div>
+                            <img src="${page.imageUrl}" alt="학습 참고 이미지">
+                        </div>
+                    `;
+                } else if (page.type === 'exam') {
+                    // 시험(타이핑) 페이지 렌더링
+                    let examHtml = `
+                        <h2>${page.subtitle}</h2>
+                        <div class="mode-toggle">
+                            <button class="mode-btn" onclick="switchMode(this, 'memory')">📖 전체 내용 보기</button>
+                            <button class="mode-btn active" onclick="switchMode(this, 'practice')">✏️ 한 줄씩 암기</button>
+                            <button class="mode-btn" onclick="switchMode(this, 'exam')">📋 전체 시험보기</button>
+                        </div>
+                        <div class="memory-overview"></div>
+                        <div class="practice-section active"></div>
+                        <div class="exam-section"></div>
+                    `;
+                    pageSec.innerHTML = examHtml;
+
+                    const memoryOverview = pageSec.querySelector('.memory-overview');
+                    memoryOverview.innerHTML = `<h3>${page.subtitle} 전체 내용</h3>`;
+
+                    page.subsections.forEach(sub => {
+                        const section = document.createElement('div');
+                        section.className = 'memory-overview-section';
+                        section.innerHTML = `<h4>${sub.subTitle}</h4>`;
+
+                        sub.questions.forEach(q => {
+                            const item = document.createElement('div');
+                            item.className = 'memory-overview-item';
+                            item.innerHTML = `<span class="memory-overview-index">${q.index}</span>${q.answer}`;
+                            section.appendChild(item);
+                        });
+
+                        memoryOverview.appendChild(section);
+                    });
+
+                    const practiceSec = pageSec.querySelector('.practice-section');
+                    const examSec = pageSec.querySelector('.exam-section');
+
+                    page.subsections.forEach(sub => {
+                        const pSubWrapper = document.createElement('div');
+                        pSubWrapper.innerHTML = `<div class="subsection-title">${sub.subTitle}</div>`;
+                        
+                        const eSubWrapper = document.createElement('div');
+                        eSubWrapper.innerHTML = `<div class="subsection-title"> ${sub.subTitle}</div>`;
+
+                        sub.questions.forEach(q => {
+                            pSubWrapper.appendChild(createQuestionBox(q.index, q.answer, 'practice'));
+                            eSubWrapper.appendChild(createQuestionBox(q.index, q.answer, 'exam'));
+                        });
+
+                        practiceSec.appendChild(pSubWrapper);
+                        examSec.appendChild(eSubWrapper);
+                    });
+
+                    // 시험 모드 하단 버튼 추가
+                    const examSubmitArea = document.createElement('div');
+                    examSubmitArea.className = 'exam-submit-area';
+                    examSubmitArea.innerHTML = `
+                        <button class="exam-submit-btn" onclick="evaluateExam(this)">전체 시험 제출 및 채점하기</button>
+                        <button class="capture-btn" onclick="captureScreen()">📸 결과 캡처 저장</button>
+                    `;
+                    examSec.appendChild(examSubmitArea);
+                }
+
+                pageContainerDiv.appendChild(pageSec);
+            });
+
+            container.appendChild(tabDiv);
+            isFirstTab = false;
+        }
+    });
+
+    // 공통 문제 박스 HTML 생성기
+    function createQuestionBox(index, answer, mode) {
+        const box = document.createElement('div');
+        box.className = 'question-box';
+        box.setAttribute('data-answer', answer);
+
+        let actionHtml = '';
+        if (mode === 'practice') {
+            actionHtml = `
+                <div class="btn-group">
+                    <button class="submit-btn" onclick="evaluateAnswer(this)">제출 및 채점</button>
+                    <button class="toggle-ans-btn" onclick="toggleAnswer(this)">정답 숨기기</button>
+                </div>
+            `;
+        }
+
+        box.innerHTML = `
+            <div class="question-index">${index}</div>
+            <div class="question-body">
+                <textarea class="user-input" placeholder="여기에 암기한 내용을 타이핑하세요..."></textarea>
+                ${actionHtml}
+                <div class="result-container">
+                    <div class="result-label ans-label">정답:</div>
+                    <div class="result-text ans-view"></div>
+                    <div class="result-label">내 작성:</div>
+                    <div class="result-text user-view"></div>
+                </div>
+            </div>
+        `;
+        return box;
+    }
+
+    // 1단계 Title 탭 전환
+    function switchTab(evt, tabId) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    // 2단계 영역(Sub Tab) 전환
+    function switchSubTab(evt, tabKey, pageId) {
+        const tabContent = document.getElementById(tabKey);
+        tabContent.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        tabContent.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(pageId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    // 모드 전환 (연습모드 <-> 시험모드)
+    function switchMode(btn, mode) {
+        const pageSection = btn.closest('.page-section');
+        pageSection.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const practiceSec = pageSection.querySelector('.practice-section');
+        const examSec = pageSection.querySelector('.exam-section');
+        const memoryOverview = pageSection.querySelector('.memory-overview');
+
+        memoryOverview.classList.toggle('active', mode === 'memory');
+        practiceSec.classList.toggle('active', mode === 'practice');
+        examSec.classList.toggle('active', mode === 'exam');
+    }
+
+    // 텍스트 비교 알고리즘 (띄어쓰기 및 가운데점 예외 처리)
+    function compareText(correctAnswer, userInput) {
+        const normalize = (str) => str.replace(/[\s⋅·,]+/g, '');
+        let cleanCorrect = normalize(correctAnswer);
+        let userHtml = '';
+        let userIdx = 0;
+
+        for (let i = 0; i < userInput.length; i++) {
+            let char = userInput[i];
+            
+            if (/\s/.test(char)) {
+                userHtml += char;
+                continue;
+            }
+
+            if (char === '⋅' || char === '·' || char === ',') {
+                userHtml += `<span class="char-correct">${char}</span>`;
+                continue;
+            }
+
+            if (userIdx < cleanCorrect.length) {
+                while (userIdx < cleanCorrect.length && (cleanCorrect[userIdx] === '⋅' || cleanCorrect[userIdx] === '·' || cleanCorrect[userIdx] === ',')) {
+                    userIdx++;
+                }
+
+                if (userIdx < cleanCorrect.length && char === cleanCorrect[userIdx]) {
+                    userHtml += `<span class="char-correct">${char}</span>`;
+                } else {
+                    userHtml += `<span class="char-incorrect">${char}</span>`;
+                }
+                userIdx++;
+            } else {
+                userHtml += `<span class="char-incorrect">${char}</span>`;
+            }
+        }
+        return userHtml;
+    }
+
+    // 한 줄 채점
+    function evaluateAnswer(btn) {
+        const questionBox = btn.closest('.question-box');
+        const correctAnswer = questionBox.getAttribute('data-answer');
+        const userInput = questionBox.querySelector('.user-input').value;
+        const resultContainer = questionBox.querySelector('.result-container');
+        const ansView = questionBox.querySelector('.ans-view');
+        const userView = questionBox.querySelector('.user-view');
+        const toggleBtn = questionBox.querySelector('.toggle-ans-btn');
+
+        resultContainer.style.display = 'grid';
+        ansView.textContent = correctAnswer;
+        userView.innerHTML = compareText(correctAnswer, userInput);
+        
+        toggleBtn.style.display = 'inline-block';
+        toggleBtn.textContent = '정답 숨기기';
+        toggleBtn.style.backgroundColor = '#64748b';
+    }
+
+    // 결과 칸 숨기기/보기 토글 기능
+    function toggleAnswer(btn) {
+        const questionBox = btn.closest('.question-box');
+        const resultContainer = questionBox.querySelector('.result-container');
+        
+        if (resultContainer.style.display === 'none') {
+            resultContainer.style.display = 'grid';
+            btn.textContent = '정답 숨기기';
+            btn.style.backgroundColor = '#64748b';
+        } else {
+            resultContainer.style.display = 'none';
+            btn.textContent = '정답 보기';
+            btn.style.backgroundColor = '#0284c7';
+        }
+    }
+
+    // 전체 시험 채점
+    function evaluateExam(btn) {
+        const examSection = btn.closest('.exam-section');
+        const questionBoxes = examSection.querySelectorAll('.question-box');
+
+        questionBoxes.forEach(box => {
+            const correctAnswer = box.getAttribute('data-answer');
+            const userInput = box.querySelector('.user-input').value;
+            const resultContainer = box.querySelector('.result-container');
+            const ansView = box.querySelector('.ans-view');
+            const userView = box.querySelector('.user-view');
+
+            resultContainer.style.display = 'grid';
+            ansView.textContent = correctAnswer;
+            userView.innerHTML = compareText(correctAnswer, userInput);
+        });
+    }
+
+    // 화면 캡처 저장
+    function captureScreen() {
+        const targetElement = document.getElementById('captureArea');
+        html2canvas(targetElement, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'memorize_result.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+</script>
+
+</body>
+</html>
