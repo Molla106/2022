@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2022 개정 수학과 성취기준</title>
+    <!-- 화면 캡처를 위한 html2canvas 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0284c7;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+        }
+
+        /* 1단계 탭 메뉴 스타일 (Title 선택) */
+        .tab-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background-color: #e2e8f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 2단계 영역(Sub Tab) 메뉴 스타일 */
+        .sub-tab-menu {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .sub-tab-btn {
+            padding: 7px 14px;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #475569;
+            font-size: 0.95rem;
+        }
+
+        .sub-tab-btn.active {
+            background-color: #0f172a;
+            color: white;
+            border-color: #0f172a;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* 모드 전환 버튼 (시험 페이지 내부) */
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+
+        .mode-btn {
+            padding: 6px 14px;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .mode-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .memory-overview {
+            display: none;
+            margin-bottom: 20px;
+            padding: 18px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .memory-overview.active {
+            display: block;
+        }
+
+        .memory-overview h3 {
+            margin: 0 0 14px;
+            color: var(--primary-color);
+            font-size: 1.05rem;
+        }
+
+        .memory-overview-section {
+            margin-top: 14px;
+        }
+
+        .memory-overview-section:first-of-type {
+            margin-top: 0;
+        }
+
+        .memory-overview-section h4 {
+            margin: 0 0 6px;
+            font-size: 0.98rem;
+            color: #334155;
+        }
+
+        .memory-overview-item {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+
+        .memory-overview-index {
+            display: inline-block;
+            min-width: 28px;
+            font-weight: bold;
+            color: #64748b;
+        }
+
+        .practice-section, .exam-section {
+            display: none;
+        }
+
+        .practice-section.active, .exam-section.active {
+            display: block;
+        }
+
+        /* 이미지 페이지 스타일 */
+        .image-page-container {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .image-page-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-top: 15px;
+        }
+
+        .image-desc {
+            font-size: 1rem;
+            color: #475569;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        /* 중간 분류 제목 스타일 */
+        .subsection-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #0284c7;
+            margin: 20px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #bae6fd;
+        }
+
+        /* 문제 박스 레이아웃 */
+        .question-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .question-index {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #334155;
+            min-width: 45px;
+            padding-top: 8px;
+            flex-shrink: 0;
+        }
+
+        .question-body {
+            flex-grow: 1;
+        }
+
+        textarea.user-input {
+            width: 100%;
+            height: 75px;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        textarea.user-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .btn-group {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            background-color: #0284c7;
+        }
+
+        .toggle-ans-btn {
+            background-color: #0284c7;
+            color: white;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .toggle-ans-btn:hover {
+            background-color: #475569;
+        }
+
+        /* 시험 모드 하단 버튼 영역 */
+        .exam-submit-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .exam-submit-btn {
+            background-color: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.05rem;
+            flex-grow: 1;
+        }
+
+        .exam-submit-btn:hover {
+            background-color: #059669;
+        }
+
+        .capture-btn {
+            background-color: #6366f1;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .capture-btn:hover {
+            background-color: #4f46e5;
+        }
+
+        /* 결과 비교 영역 */
+        .result-container {
+            margin-top: 12px;
+            display: none;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            grid-template-columns: auto 1fr;
+            gap: 6px 8px;
+            align-items: baseline;
+        }
+
+        .result-label {
+            font-weight: bold;
+            color: #64748b;
+            white-space: nowrap;
+        }
+
+        .ans-label {
+            padding-left: 3.5px; 
+        }
+
+        .result-text {
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        .char-correct {
+            color: #059669;
+        }
+
+        .char-incorrect {
+            color: #dc2626;
+            background-color: #fee2e2;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .char-missing {
+            color: #7e22ce;
+            background-color: #f3e8ff;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .math-overline,
+        .math-overrightarrow,
+        .math-overleftrightarrow {
+            position: relative;
+            display: inline-block;
+            line-height: 1;
+            margin: 0 0.08em;
+        }
+
+        .math-overline::before,
+        .math-overrightarrow::before,
+        .math-overleftrightarrow::before {
+            content: '';
+            position: absolute;
+            top: -0.18em;
+            left: 0;
+            right: 0;
+            border-top: 1px solid currentColor;
+        }
+
+        .math-overrightarrow::after,
+        .math-overleftrightarrow::after {
+            content: '';
+            position: absolute;
+            top: -0.34em;
+            right: -0.04em;
+            width: 0.35em;
+            height: 0.35em;
+            border-top: 1px solid currentColor;
+            border-right: 1px solid currentColor;
+            transform: rotate(45deg);
+        }
+
+        .math-overleftrightarrow::before {
+            box-shadow: 0 -0.16em 0 -0.08em currentColor;
+        }
+
+        .math-overleftrightarrow::after {
+            left: -0.04em;
+            right: auto;
+            transform: rotate(-135deg);
+        }
+
+        .math-hat {
+            position: relative;
+            display: inline-block;
+            line-height: 1;
+            margin: 0 0.08em;
+        }
+
+        .math-hat::before {
+            content: '^';
+            position: absolute;
+            top: -0.55em;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8em;
+            line-height: 1;
+        }
+
+        .math-fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            line-height: 1.1;
+            margin: 0 0.12em;
+        }
+
+        .math-fraction .numerator {
+            padding: 0 0.15em 0.08em;
+            border-bottom: 1px solid currentColor;
+        }
+
+        .math-fraction .denominator {
+            padding: 0.08em 0.15em 0;
+        }
+
+        .math-sqrt {
+            position: relative;
+            display: inline-block;
+            border-top: 1px solid currentColor;
+            line-height: 1;
+            padding: 0.08em 0.12em 0 0.18em;
+            margin-left: 0.12em;
+        }
+
+        .math-sqrt::before {
+            content: '\221A';
+            position: absolute;
+            margin-left: -0.55em;
+            margin-top: -0.08em;
+            font-size: 1.15em;
+        }
+
+        .math-root {
+            display: inline-flex;
+            align-items: flex-start;
+            vertical-align: middle;
+            margin: 0 0.12em;
+        }
+
+        .math-root .root-index {
+            font-size: 0.65em;
+            line-height: 1;
+            margin-right: -0.05em;
+            position: relative;
+            top: 0.05em;
+        }
+
+        .math-root .root-symbol {
+            font-size: 1.35em;
+            line-height: 0.8;
+        }
+
+        .math-root .root-radicand {
+            border-top: 1px solid currentColor;
+            padding: 0.08em 0.12em 0 0.15em;
+            line-height: 1;
+        }
+
+        .math-sum {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            line-height: 0.9;
+            margin: 0 0.12em;
+        }
+
+        .math-sum .sum-symbol {
+            order: 2;
+            font-size: 1.8em;
+            line-height: 0.75;
+        }
+
+        .math-sum .sum-upper {
+            order: 1;
+            font-size: 0.7em;
+            min-height: 1em;
+        }
+
+        .math-sum .sum-lower {
+            order: 3;
+            font-size: 0.7em;
+            min-height: 1em;
+        }
+
+        .math-operator {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+            padding: 0 0.55em 0.65em;
+            margin: 0 0.08em;
+        }
+
+        .math-operator .operator-symbol {
+            font-size: 1.8em;
+            line-height: 0.85;
+        }
+
+        .math-operator .operator-left,
+        .math-operator .operator-right {
+            position: absolute;
+            bottom: 0;
+            font-size: 0.7em;
+            line-height: 1;
+        }
+
+        .math-operator .operator-left {
+            left: 0;
+        }
+
+        .math-operator .operator-right {
+            right: 0;
+        }
+
+        .math-integral {
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 0.12em;
+        }
+
+        .math-integral .integral-symbol {
+            font-size: 2em;
+            line-height: 0.7;
+        }
+
+        .math-integral .integral-limits {
+            display: inline-flex;
+            flex-direction: column;
+            font-size: 0.65em;
+            line-height: 1;
+            margin-left: 0.08em;
+        }
+
+        .math-integral .integral-upper {
+            order: 1;
+        }
+
+        .math-integral .integral-lower {
+            order: 2;
+        }
+
+        .math-evaluation {
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 0.12em;
+        }
+
+        .math-evaluation .evaluation-limits {
+            display: inline-flex;
+            flex-direction: column;
+            font-size: 0.65em;
+            line-height: 1;
+            margin-left: 0.12em;
+        }
+
+        .math-evaluation .evaluation-upper {
+            order: 1;
+        }
+
+        .math-evaluation .evaluation-lower {
+            order: 2;
+        }
+
+        .math-limit {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            line-height: 1;
+            margin: 0 0.12em;
+        }
+
+        .math-limit .limit-symbol {
+            font-style: italic;
+            font-size: 1.05em;
+        }
+
+        .math-limit .limit-value {
+            font-size: 0.7em;
+            white-space: nowrap;
+            margin-top: 0.08em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="captureArea">
+    <h1>2022 개정 수학과 성취기준</h1>
+
+    <!-- 1단계 Title 탭 메뉴 (자동 생성됨) -->
+    <div class="tab-menu" id="tabMenu"></div>
+
+    <!-- 1단계 Title별 컨텐츠 내용 (자동 생성됨) -->
+    <div id="tabContentContainer"></div>
+</div>
+
+<script>
+    // ==========================================
+    // 📚 [암기 데이터 관리 영역 (다중 영역 & 페이지 타입 지원)]
+    // type: "exam" -> 타이핑 시험 페이지
+    // type: "image" -> 이미지 첨부 학습 페이지
+    // ==========================================
+    const studyData = {
+        tab1: {
+            title: "수와 연산",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "수와 연산 내용체계 표",
+                    imageUrl: "1.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "수와 연산 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 소인수분해",
+                            questions: [
+                                { index: "[9수01-01]", answer: " 소인수분해의 뜻을 알고, 자연수를 소인수분해 할 수 있다. " },
+                                { index: "[9수01-02]", answer: " 소인수분해를 이용하여 최대공약수와 최소공배수를 구할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 정수와 유리수",
+                            questions: [
+                                { index: "[9수01-03]", answer: " 다양한 상황을 이용하여 음수의 필요성을 인식하고, 양수와 음수, 정수와 유리수의 개념을 이해한다." },
+                                { index: "[9수01-04]", answer: " 정수와 유리수의 대소 관계를 판단할 수 있다." },
+                                { index: "[9수01-05]", answer: " 정수와 유리수의 사칙계산의 원리를 이해하고, 그 계산을 할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 유리수와 순환소수",
+                            questions: [
+                                { index: "[9수01-06]", answer: " 순환소수의 뜻을 알고, 유리수와 순환소수의 관계를 설명할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "4. 제곱근과 실수",
+                            questions: [
+                                { index: "[9수01-07]", answer: " 제곱근의 뜻과 성질을 알고, 제곱근의 대소 관계를 판단할 수 있다." },
+                                { index: "[9수01-08]", answer: " 무리수의 개념을 이해하고, 무리수의 유용성을 인식할 수 있다." },
+                                { index: "[9수01-09]", answer: " 실수의 대소 관계를 판단하고 설명할 수 있다." },
+                                { index: "[9수01-10]", answer: " 근호를 포함한 식의 사칙계산의 원리를 이해하고, 그 계산을 할 수 있다."},
+                            ]
+                        }
+                    ]
+                },
+{
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "수와 연산 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "수와 연산 성취기준 해설",
+                            questions: [
+                                { index: "[9수01-02]", answer: " 초등학교에서 학습한 최대공약수와 최소공배수의 개념을 바탕으로 소인수분해를 이용하여 최대공약수와 최소공배수를 구하게 한다. 최대공약수와 최소공배수는 자연수의 소인수분해를 이용하는 범위에서 다루고, 최대공약수와 최소공배수의 활용 문제는 다루지 않는다." },
+                                { index: "[9수01-05]", answer: " 정수의 사칙계산의 원리는 여러 가지 모델을 이용하여 직관적으로 이해하게 하고, 실생활에서 사칙계산의 유용성을 인식하게 한다." },
+                                { index: "[9수01-06]", answer: " 순환소수를 분수로 고치는 것은 순환소수가 유리수임을 이해할 수 있는 정도로 다룬다. 유한소수를 순환소수로 나타내는 것은 다루지 않는다." },
+                                { index: "[9수01-08]", answer: " 실생활에서 사용되는 무리수의 예를 찾아보는 활동을 통해 무리수의 필요성과 유용성을 인식하게 한다. 실수는 유리수와 무리수로 이루어짐을 이해하게 하고, 수 체계의 논리적인 아름다움에 관심을 갖게 한다." },
+                            ]
+                        },
+                        {
+                            subTitle: "수와 연산 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘수와 연산’ 영역에서는 용어와 기호로 ‘소수, 합성수, 거듭제곱, 지수, 밑, 소인수, 소인수분해, 서로소, 양수, 음수, 양의 정수, 음의 정수, 정수, 수직선, 양의 유리수, 음의 유리수, 유리수, 절댓값, 교환법칙, 결합법칙, 분배법칙, 역수, 유한소수, 무한소수, 순환소수, 순환마디, 제곱근, 근호, 무리수, 실수, 분모의 유리화, 양의 부호(+), 음의 부호(-), | |, ≤, ≥, 순환소수 표현, √’를 다룬다." },
+                                { index: "2.", answer: "정수와 유리수의 사칙계산의 원리를 이용하는 문제를 해결하기 위해 더 나은 계산 방법을 끈기 있게 찾아보게 하고, 풀이 과정과 결과를 반성하는 태도를 갖게 한다." },
+                                { index: "3.", answer: "제곱근과 무리수는 피타고라스 정리를 이용하여 도입할 수 있다." },
+                                { index: "4.", answer: "한 변의 길이가 1인 정사각형의 대각선의 길이 등을 이용하여 무리수의 존재를 직관적으로 이해하게 한다." },
+                                { index: "5.", answer: "제곱근의 값은 계산기 등을 이용하여 구할 수 있음을 알게 한다." },
+                                { index: "6.", answer: "정수, 유리수와 관련하여 지나치게 복잡한 계산을 포함하는 문제는 다루지 않는다." },
+                                { index: "7.", answer: "사칙계산 이외의 이항연산 문제는 다루지 않는다."},
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        tab2: {
+            title: "변화와 관계",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "변화와 관계 내용체계 표",
+                    imageUrl: "2.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "변화와 관계 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 문자의 사용과 식 ",
+                            questions: [
+                                { index: "[9수02-01]", answer: " 다양한 상황을 문자를 사용한 식으로 나타내어 그 유용성을 인식하고, 식의 값을 구할 수 있다." },
+                                { index: "[9수02-02]", answer: " 일차식의 덧셈과 뺄셈의 원리를 이해하고, 그 계산을 할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 일차방정식",
+                            questions: [
+                                { index: "[9수02-03]", answer: " 방정식과 그 해의 뜻을 알고, 등식의 성질을 설명할 수 있다." },
+                                { index: "[9수02-04]", answer: " 일차방정식을 풀 수 있고, 이를 활용하여 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 좌표평면과 그래프",
+                            questions: [
+                                { index: "[9수02-05]", answer: " 순서쌍과 좌표를 이해하고, 그 편리함을 인식할 수 있다." },
+                                { index: "[9수02-06]", answer: " 다양한 상황을 그래프로 나타내고, 주어진 그래프를 해석할 수 있다." },
+                                { index: "[9수02-07]", answer: " 정비례, 반비례 관계를 이해하고, 그 관계를 표, 식, 그래프로 나타낼 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "4. 식의 계산",
+                            questions: [
+                                { index: "[9수02-08]", answer: " 지수법칙을 이해하고, 이를 이용하여 식을 간단히 할 수 있다." },
+                                { index: "[9수02-09]", answer: " 다항식의 덧셈과 뺄셈의 원리를 이해하고, 그 계산을 할 수 있다." },
+                                { index: "[9수02-10]", answer: " ‘(단항식)×(다항식)’, ‘(다항식)×(단항식)’과 같은 곱셈과 나눗셈의 원리를 이해하고, 그 계산을 할 수 있다. "},
+                            ]
+                        },
+                        {
+                            subTitle: "5. 일차부등식",
+                            questions: [
+                                { index: "[9수02-11]", answer: " 부등식과 그 해의 뜻을 알고, 부등식의 성질을 설명할 수 있다." },
+                                { index: "[9수02-12]", answer: " 일차부등식을 풀 수 있고, 이를 활용하여 문제를 해결할 수 있다."},
+                            ]
+                        },
+                        {
+                            subTitle: "6. 연립일차방정식",
+                            questions: [
+                                { index: "[9수02-13]", answer: " 미지수가 2개인 연립일차방정식을 풀 수 있고, 이를 활용하여 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "7. 일차함수와 그 그래프 ",
+                            questions: [
+                                { index: "[9수02-14]", answer: " 함수의 개념을 이해하고, 함숫값을 구할 수 있다." },
+                                { index: "[9수02-15]", answer: " 일차함수의 개념을 이해하고, 그 그래프를 그릴 수 있다." },
+                                { index: "[9수02-16]", answer: " 일차함수의 그래프의 성질을 이해하고, 이를 활용하여 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "8. 수열",
+                            questions: [
+                                { index: "[9수02-17]", answer: " 일차함수와 미지수가 2개인 일차방정식의 관계를 설명할 수 있다." },
+                                { index: "[9수02-18]", answer: " 두 일차함수의 그래프와 연립일차방정식의 관계를 설명할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "9. 다항식의 곱셈과 인수분해",
+                            questions: [
+                                { index: "[9수02-19]", answer: " 다항식의 곱셈과 인수분해를 할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "10. 이차방정식",
+                            questions: [
+                                { index: "[9수02-20]", answer: " 이차방정식을 풀 수 있고, 이를 활용하여 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "11. 수학적 모델링",
+                            questions: [
+                                { index: "[9수02-21]", answer: " 이차함수의 개념을 이해한다." },
+                                { index: "[9수02-22]", answer: " 이차함수의 그래프를 그릴 수 있고, 그 성질을 설명할 수 있다." },
+                            ]
+                        },
+                    ]
+                },
+{
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "변화와 관계 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "변화와 관계 성취기준 해설",
+                            questions: [
+                                { index: "[9수02-05]", answer: " 실생활에서 좌표가 사용되는 예를 찾아보고 이를 수직선과 좌표평면 위에 표현해 보며, 그 유용성과 편리함을 인식하게 한다." },
+                                { index: "[9수02-06]", answer: " 다양한 상황을 그래프로 나타내어 증가와 감소, 주기적 변화 등 변화 상태를 쉽게 파악할 수 있게 한다. 주어진 그래프를 해석하여 그래프가 나타내는 상황을 설명하게 함으로써 그래프의 유용성을 인식하게 한다." },
+                                { index: "[9수02-07]", answer: " 속력과 거리, 속력과 시간과 같은 실생활의 예를 통해 정비례와 반비례 관계를 직관적으로 이해하게 하고, 정비례와 반비례 관계가 성립하는 실생활의 예를 찾아 설명하게 한다." },
+                                { index: "[9수02-08]", answer: " 지수법칙은 지수가 자연수인 범위에서 단항식의 곱셈과 나눗셈을 하는 데 필요한 정도로 다룬다." },
+                                { index: "[9수02-10]", answer: " 다항식의 나눗셈에서는 다항식을 단항식으로 나누어 그 몫이 다항식이 되는 경우만 다룬다." },
+                                { index: "[9수02-19]", answer: " 다항식의 곱셈과 다항식의 인수분해의 역관계를 이해하고, 이와 유사한 관계를 찾아보는 활동을 하게 한다. 다항식의 곱셈과 인수분해는 다음의 경우를 다룬다. m(a+b)=ma+mb, (a+b)^2=a^2+2ab+b^2, (a-b)^2=a^2-2ab+b^2, (a+b)(a-b)=a^2-b^2, (x+a)(x+b)=x^2+(a+b)x+ab, (ax+b)(cx+d)=acx^2+(ad+bc)x+bd" },
+                                { index: "[9수02-22]", answer: " 이차함수 y=f(x)에서 최댓값과 최솟값은 x의 범위가 실수 전체인 경우만 다룬다." },
+                            ]
+                        },
+                        {
+                            subTitle: "변화와 관계 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘변화와 관계’ 영역에서는 용어와 기호로 ‘대입, 다항식, 항, 단항식, 상수항, 계수, 차수, 일차식, 동류항, 등식, 방정식, 미지수, 해, 근, 항등식, 이항, 일차방정식, 전개, 변수, 좌표, 순서쌍, x좌표, y좌표, 원점, 좌표축, x축, y축, 좌표평면, 제1사분면, 제2사분면, 제3사분면, 제4사분면, 그래프, 정비례, 반비례, 부등식, 일차부등식, 연립방정식, 함수, 함숫값, 일차함수, 기울기, x절편, y절편, 평행이동, 직선의 방정식, 인수, 인수분해, 완전제곱식, 이차방정식, 중근, 근의 공식, 이차함수, 포물선, 축, 꼭짓점, 최댓값, 최솟값, f(x), y=f(x)’를 다룬다." },
+                                { index: "2.", answer: "문자와 수, 문자와 일상 언어의 공통점과 차이점에 대한 탐색을 통해 문자의 특징을 이해하고, 자신의 삶 속에서 문자의 유용성을 인식하게 한다." },
+                                { index: "3.", answer: "수에 대한 사칙연산과 소인수분해가 다항식으로 확장될 수 있음을 인식하게 한다. " },
+                                { index: "4.", answer: "방정식과 부등식, 함수는 다양한 상황을 통해 도입하고, 그 필요성을 인식하게 한다. " },
+                                { index: "5.", answer: "방정식과 부등식은 여러 가지 방법으로 풀어 보면서 더 나은 풀이 방법으로 해를 찾게 한다. 구한 해가 문제 상황에 적합한지 확인하는 과정을 통해 타당한 근거에 따라 자신의 의견을 논리적으로 설명하는 태도를 갖게 한다." },
+                                { index: "6.", answer: "다양한 상황을 일상 언어, 표, 그래프, 식으로 나타내고 이들 사이의 상호 변환 활동을 하게 한다." },
+                                { index: "7.", answer: "함수의 개념은 다양한 상황에서 한 양이 변함에 따라 다른 양이 하나씩 정해지는 두 양 사이의 대응 관계를 이용하여 도입한다. "},
+                                { index: "8.", answer: "다양한 상황을 이용하여 일차함수와 이차함수의 의미를 다룬다."},
+                                { index: "9.", answer: "공학 도구를 이용하여 함수의 그래프를 그리거나 함수의 그래프의 성질을 탐구하게 한다."},
+                                { index: "10.", answer: "이차방정식은 해가 실수인 경우만 다룬다"},
+                                { index: "11.", answer: "이차방정식의 근과 계수와의 관계는 다루지 않는다."},
+                                { index: "12.", answer: "실생활이나 사회 및 자연 현상과 관련된 문제를 해결할 때 수학적 모델링을 적용하고 도전적으로 문제를 해결할 수 있게 한다. 이때, 환경 및 기후변화 등과 관련된 다양한 문제 상황을 통해 생태전환에 관심을 갖게 한다."},
+                                { index: "13.", answer: "방정식, 부등식, 함수에 대한 지나치게 복잡한 활용 문제는 다루지 않는다."},
+                                { index: "14.", answer: "‘식의 값’, ‘좌변’, ‘우변’, ‘양변’, ‘이차식’, ‘전개식’, ‘연립일차방정식’, ‘소거’, ‘가감법’, ‘대입법’, ‘함수의 그래프’ 용어는 교수⋅학습 상황에서 사용할 수 있다."},
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        tab3: {
+            title: "도형과 측정",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "도형과 측정 내용체계 표",
+                    imageUrl: "3.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "도형과 측정 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 기본 도형",
+                            questions: [
+                                { index: "[9수03-01]", answer: " 점, 선, 면, 각을 이해하고, 실생활 상황과 연결하여 점, 직선, 평면의 위치 관계를 설명할 수 있다." },
+                                { index: "[9수03-02]", answer: " 평행선에서 동위각과 엇각의 성질을 이해하고 설명할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 작도와 합동",
+                            questions: [
+                                { index: "[9수03-03]", answer: " 삼각형을 작도하고, 그 과정을 설명할 수 있다." },
+                                { index: "[9수03-04]", answer: " 삼각형의 합동 조건을 이해하고, 이를 이용하여 두 삼각형이 합동인지 판별할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 평면도형의 성질",
+                            questions: [
+                                { index: "[9수03-05]", answer: " 다각형의 성질을 이해하고 설명할 수 있다." },
+                                { index: "[9수03-06]", answer: " 부채꼴의 중심각과 호의 관계를 이해하고, 이를 이용하여 부채꼴의 호의 길이와 넓이를 구할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "4. 입체도형의 성질",
+                            questions: [
+                                { index: "[9수03-07]", answer: " 구체적인 모형이나 공학 도구를 이용하여 다면체와 회전체의 성질을 탐구하고, 이를 설명할 수 있다." },
+                                { index: "[9수03-08]", answer: " 입체도형의 겉넓이와 부피를 구할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "5. 삼각형과 사각형의 성질",
+                            questions: [
+                                { index: "[9수03-09]", answer: " 이등변삼각형의 성질을 이해하고 정당화할 수 있다. " },
+                                { index: "[9수03-10]", answer: " 삼각형의 외심과 내심의 성질을 이해하고 정당화할 수 있다. "},
+                                { index: "[9수03-11]", answer: " 사각형의 성질을 이해하고 정당화할 수 있다. "},
+                            ]
+                        },
+                        {
+                            subTitle: "6. 도형의 닮음",
+                            questions: [
+                                { index: "[9수03-12]", answer: " 도형의 닮음의 뜻과 닮은 도형의 성질을 이해하고, 닮음비를 구할 수 있다." },
+                                { index: "[9수03-13]", answer: " 삼각형의 닮음 조건을 이해하고, 이를 이용하여 두 삼각형이 닮음인지 판별할 수 있다." },
+                                { index: "[9수03-14]", answer: " 평행선 사이의 선분의 길이의 비를 구할 수 있다. " },
+                            ]
+                        },
+                        {
+                            subTitle: "7. 피타고라스 정리",
+                            questions: [
+                                { index: "[9수03-15]", answer: " 피타고라스 정리를 이해하고 정당화할 수 있다. " },
+                            ]
+                        },
+                        {
+                            subTitle: "8. 삼각비",
+                            questions: [
+                                { index: "[9수03-16]", answer: " 삼각비의 뜻을 알고, 간단한 삼각비의 값을 구할 수 있다. " },
+                                { index: "[9수03-17]", answer: " 삼각비를 활용하여 여러 가지 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "9. 원의 성질",
+                            questions: [
+                                { index: "[9수03-18]", answer: " 원의 현에 관한 성질과 접선에 관한 성질을 이해하고 정당화할 수 있다." },
+                                { index: "[9수03-19]", answer: " 원주각의 성질을 이해하고 정당화할 수 있다." },
+                            ]
+                        },
+                    ]
+                },
+{
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "도형과 측정 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "도형과 측정 성취기준 해설",
+                            questions: [
+                                { index: "[9수03-01]", answer: " 점, 선, 면, 각과 관련된 용어는 다양한 상황에서 직관적으로 이해하게 한다." },
+                                { index: "[9수03-03]", answer: " 주어진 삼각형과 합동인 삼각형을 작도하는 활동을 하고, 자신의 방법을 설명하게 한다." },
+                                { index: "[9수03-05]", answer: " 삼각형의 내각과 외각의 크기, 다각형의 내각과 외각의 크기의 합, 다각형의 대각선의 개수를 구하는 과정을 탐구하여 다각형의 성질을 추측하고 일반화할 수 있게 한다." },
+                                { index: "[9수03-07]", answer: " 구체적인 사물, 전개도, 교구, 컴퓨터 프로그램 등을 이용하여 다면체와 회전체를 관찰하고 그 성질을 탐구하게 한다. 회전체 단면의 모양은 회전체의 성질을 이해하는 데 필요한 정도로 다룬다." },
+                                { index: "[9수03-09]", answer: " 종이접기, 작도, 공학 도구 등을 이용하여 이등변삼각형의 성질을 추측하게 하고, 그 성질을 삼각형의 합동 조건을 이용하여 정당화할 수 있게 한다. 이때, 증명이라는 용어를 도입하고, 그 필요성을 인식하게 한다." },
+                                { index: "[9수03-11]", answer: " 사각형의 성질은 대각선에 관한 성질을 위주로 다룬다. 여러 가지 사각형의 성질을 통해 사각형 사이의 관계를 설명하게 한다." },
+                                { index: "[9수03-15]", answer: " 피타고라스 정리는 다양한 활동을 통하여 추측하고 정당화할 수 있게 한다. 피타고라스 정리의 역은 직관적으로 이해하게 하고, 이를 이용하여 세 변의 길이가 주어진 삼각형이 직각삼각형인지 판별하게 한다." },
+                                { index: "[9수03-17]", answer: " 삼각비를 활용하여 직접 측정하기 어려운 거리나 높이 등을 구해 보는 활동을 통해 유용성을 인식하고 흥미를 느낄 수 있게 한다." },
+                            ]
+                        },
+                        {
+                            subTitle: "도형과 측정 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘도형과 측정’ 영역에서는 용어와 기호로 ‘교점, 교선, 두 점 사이의 거리, 중점, 수직이등분선, 꼬인 위치, 교각, 맞꼭지각, 엇각, 동위각, 평각, 직교, 수선의 발, 작도, 대변, 대각, 삼각형의 합동 조건, 내각, 외각, 부채꼴, 중심각, 호, 현, 활꼴, 할선, 다면체, 각뿔대, 정다면체, 회전체, 회전축, 원뿔대, 증명, 접선, 접점, 접한다, 외심, 외접, 외접원, 내심, 내접, 내접원, 중선, 무게중심, 닮음, 닮음비, 삼각형의 닮음 조건, 피타고라스 정리, 삼각비, 사인, 코사인, 탄젠트, 원주각, ↔AB, →AB, ―AB, //, ∠ABC, ⊥, △ABC, ≡, A͡B, π, □ABCD, ∼, sinA, cosA, tanA’를 다룬다." },
+                                { index: "2.", answer: "다양한 교구나 공학 도구를 이용하여 합동과 닮음의 의미를 이해하게 한다." },
+                                { index: "3.", answer: "다각형과 다면체는 그 모양이 볼록인 경우만 다룬다." },
+                                { index: "4.", answer: "간단한 입체도형의 단면을 관찰하는 활동과 전개도를 접어 간단한 입체도형을 만드는 활동을 통해 평면도형과 입체도형의 관계를 직관적으로 이해하게 한다." },
+                                { index: "5.", answer: "다양한 교구나 공학 도구를 이용하여 도형을 그리거나 만들어 보는 활동을 통해 도형의 성질을 추론하고 토론할 수 있게 한다." },
+                                { index: "6.", answer: "도형의 성질을 이해하고 정당화하는 방법은 관찰이나 실험을 통한 확인, 사례나 근거 제시를 통한 설명, 유사성에 근거한 추론, 증명 등이 있으며, 이를 학생 수준에 맞게 활용할 수 있다." },
+                                { index: "7.", answer: "도형의 성질을 정당화하는 다양한 방법을 통해 체계적으로 사고하고 타인을 논리적으로 설득하는 태도를 갖게 한다."},
+                                { index: "8.", answer: "증명을 할 때, ‘가정’, ‘결론’ 용어는 다루지 않는다." },
+                                { index: "9.", answer: "수학사를 통하여 피타고라스 정리, 삼각비에 관심을 가지고 그 유용성을 인식하게 한다." },
+                                { index: "10.", answer: "삼각비 사이의 관계는 다루지 않는다. " },
+                                { index: "11.", answer: "삼각비의 값은 0°에서 90°까지의 각도에 대한 것만 다룬다." },
+                                { index: "12.", answer: "주변의 건축물, 문화유산, 예술 작품 등에서 도형의 성질을 찾게 하여 수학에 대한 흥미와 관심을 가질 수 있게 한다." },
+                                { index: "13.", answer: "복잡하게 변형된 평면도형의 넓이와 둘레의 길이, 입체도형의 겉넓이와 부피를 구하는 문제는 다루지 않는다." },
+                                { index: "14.", answer: "도형의 성질을 이해하고 정당화하는 것을 평가할 때는 증명 과정에서 지나치게 엄밀한 형식 논리 규칙의 이용을 요구하는 문제는 다루지 않는다." },
+                                { index: "15.", answer: "원과 비례에 관한 성질은 다루지 않는다." },
+                                { index: "16.", answer: "‘(도형의) 대응’, ‘삼각형의 중점연결정리’, ‘접선의 길이’ 용어는 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        tab4: {
+            title: "자료와 가능성",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "자료와 가능성 내용체계 표",
+                    imageUrl: "4.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "자료와 가능성 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 대푯값",
+                            questions: [
+                                { index: "[9수04-01]", answer: "중앙값, 최빈값의 뜻을 알고, 자료의 특성에 따라 적절한 대푯값을 선택하여 구할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 도수분포표와 상대도수",
+                            questions: [
+                                { index: "[9수04-02]", answer: "자료를 줄기와 잎 그림, 도수분포표, 히스토그램, 도수분포다각형으로 나타내고 해석할 수 있다." },
+                                { index: "[9수04-03]", answer: "상대도수를 구하고, 상대도수의 분포를 표나 그래프로 나타내고 해석할 수 있다." },
+                                { index: "[9수04-04]", answer: "통계적 탐구 문제를 설정하고, 공학 도구를 이용하여 자료를 수집하여 분석하고, 그 결과를 해석할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 경우의 수와 확률",
+                            questions: [
+                                { index: "[9수04-05]", answer: "경우의 수를 구할 수 있다." },
+                                { index: "[9수04-06]", answer: "확률의 개념과 그 기본 성질을 이해하고, 확률을 구할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "4. 산포도",
+                            questions: [
+                                { index: "[9수04-07]", answer: "분산과 표준편차를 구하고 자료의 분포를 설명할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "5. 상자그림과 산점도",
+                            questions: [
+                                { index: "[9수04-08]", answer: "공학 도구를 이용하여 자료를 상자그림으로 나타내고 분포를 비교할 수 있다." },
+                                { index: "[9수04-09]", answer: "자료를 산점도로 나타내고 상관관계를 말할 수 있다." },
+                            ]
+                        } 
+                    ]
+                },
+                {
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "자료와 가능성 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "자료와 가능성 성취기준 해설",
+                            questions: [
+                                { index: "[9수01-01]", answer: " 대푯값에는 초등학교에서 학습한 평균 이외에도 중앙값, 최빈값이 있음을 알고 그 필요성을 인식하게 한다. 자료의 특성에 따라 적절한 대푯값을 선택하여 구해 보고, 각 대푯값이 어떤 상황에서 유용하게 사용될 수 있는지 토론하게 한다." },
+                                { index: "[9수01-03]", answer: " 상대도수는 도수의 총합이 다른 두 집단의 분포를 비교하는 상황에서 간단히 다루고, 상대도수의 필요성과 유용성을 인식하게 한다." },
+                                { index: "[9수01-04]", answer: " 다양한 맥락에서 해결하고자 하는 통계적 탐구 문제를 설정하고 적절한 계획을 세워 자료를 수집하게 한다. 수집한 자료를 자료의 특성과 목적에 맞게 표, 그래프, 수치 등으로 나타내어 분석하고, 그 결과를 탐구 문제와 연결하여 해석하게 한다. 자료를 수집하고 분석할 때는 인터넷 검색, 웹 기반 소프트웨어, 통계 프로그램 등을 활용하게 한다. 수집한 자료나 분석 결과가 적절한지 판단하여 계획을 수정하고, 통계적 근거를 바탕으로 토론하는 등 통계적 문제해결 과정에 주도적으로 참여하게 한다." },
+                                { index: "[9수01-05]", answer: " 경우의 수는 두 경우의 수를 합하거나 곱하는 경우 정도로만 다루고, 순열과 조합을 이용하면 쉽게 해결되는 등의 복잡한 경우의 수를 구하는 문제는 다루지 않는다." },
+                                { index: "[9수01-06]", answer: " 확률은 실험이나 관찰을 통해 구한 상대도수로서의 의미와 경우의 수의 비율로서의 의미를 연결하여 이해하게 한다. 경우의 수의 비율로 확률을 다룰 때, 각 경우가 발생할 가능성이 동등하다는 것을 가정한다는 점에 유의하게 한다." },
+                                { index: "[9수01-08]", answer: " 상자그림을 다룰 때는 두 집단의 분포를 비교하고 해석하는 활동에 중점을 두고, 이를 통해 상자그림의 유용성을 인식하게 한다." },
+                                { index: "[9수01-09]", answer: " 상관관계는 양의 상관관계, 음의 상관관계, 상관관계가 없는 경우로 구분하여 다룬다." },
+                            ]
+                        },
+                        {
+                            subTitle: "자료와 가능성 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘자료와 가능성’ 영역에서는 용어와 기호로 ‘변량, 대푯값, 중앙값, 최빈값, 줄기와 잎 그림, 계급, 계급의 크기, 도수, 도수분포표, 히스토그램, 도수분포다각형, 상대도수, 사건, 확률, 산포도, 편차, 분산, 표준편차, 사분위수, 상자그림, 산점도, 상관관계’를 다룬다." },
+                                { index: "2.", answer: " 눈금 등을 부적절하게 사용하여 자료를 부정확하게 나타낸 표나 그래프에서 오류를 찾는 활동을 통해 비판적으로 사고하는 태도를 갖게 한다." },
+                                { index: "3.", answer: " 자료를 수집하고 정리하여 표나 그래프로 나타내거나 대푯값과 산포도를 구할 때 공학 도구를 이용할 수 있게 하고, 공학 도구의 편리함과 유용성을 인식하게 한다." },
+                                { index: "4.", answer: " ‘자료와 가능성’ 영역에서 환경, 지속가능한 발전 등 범교과 학습 주제를 소재로 다루고, 이를 탐구하는 과정에서 체계적으로 사고하고 합리적으로 의사 결정을 할 수 있게 한다." },
+                                { index: "5.", answer: " 진로연계교육을 실시할 때는 학생의 흥미, 관심, 진로에 맞는 탐구 문제를 설정하여 통계 프로젝트를 수행하게 할 수 있다." },
+                                { index: "6.", answer: " ‘계급값’, ‘경우의 수’ 용어는 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        tab5: {
+            title: "공통수학 1",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "공통수학 1 내용체계 표",
+                    imageUrl: "5.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "공통수학 1 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 다항식",
+                            questions: [
+                                { index: "[10공수1-01-01]", answer: " 다항식의 사칙연산의 원리를 설명하고, 그 계산을 할 수 있다." },
+                                { index: "[10공수1-01-02]", answer: " 항등식의 성질과 나머지정리를 이해하고, 이를 활용하여 문제를 해결할 수 있다." },
+                                { index: "[10공수1-01-03]", answer: " 다항식의 인수분해를 할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 방정식과 부등식",
+                            questions: [
+                                { index: "[10공수1-02-01]", answer: " 복소수의 뜻과 성질을 설명하고, 사칙연산을 수행할 수 있다." },
+                                { index: "[10공수1-02-02]", answer: " 이차방정식의 실근과 허근을 이해하고, 판별식을 이용하여 이차방정식의 근을 판별할 수 있다." },
+                                { index: "[10공수1-02-03]", answer: " 이차방정식의 근과 계수의 관계를 설명할 수 있다." },
+                                { index: "[10공수1-02-04]", answer: " 이차방정식과 이차함수를 연결하여 그 관계를 설명할 수 있다."},
+                                { index: "[10공수1-02-05]", answer: " 이차함수의 그래프와 직선의 위치 관계를 판단할 수 있다."},
+                                { index: "[10공수1-02-06]", answer: " 이차함수의 최대, 최소를 탐구하고, 이를 실생활과 연결하여 유용성을 인식할 수 있다."},
+                                { index: "[10공수1-02-07]", answer: " 간단한 삼차방정식과 사차방정식을 풀 수 있다."},
+                                { index: "[10공수1-02-08]", answer: " 미지수가 2개인 연립이차방정식을 풀 수 있다."},
+                                { index: "[10공수1-02-09]", answer: " 미지수가 1개인 연립일차부등식을 풀 수 있다."},
+                                { index: "[10공수1-02-10]", answer: " 절댓값을 포함한 일차부등식을 풀 수 있다."},
+                                { index: "[10공수1-02-11]", answer: " 이차부등식과 이차함수를 연결하여 그 관계를 설명하고, 이차부등식과 연립이차부등식을 풀 수 있다."},
+                            ]
+                        },
+                        {
+                            subTitle: "3. 경우의 수",
+                            questions: [
+                                { index: "[10공수1-03-01]", answer: " 합의 법칙과 곱의 법칙을 이해하고, 적절한 전략을 사용하여 경우의 수와 관련된 문제를 해결할 수 있다." },
+                                { index: "[10공수1-03-02]", answer: " 순열의 개념을 이해하고, 순열의 수를 구하는 방법을 설명할 수 있다." },
+                                { index: "[10공수1-03-03]", answer: " 조합의 개념을 이해하고, 조합의 수를 구하는 방법을 설명할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "4. 행렬",
+                            questions: [
+                                { index: "[10공수1-04-01]", answer: " 행렬의 뜻을 알고, 실생활 상황을 행렬로 표현할 수 있다." },
+                                { index: "[10공수1-04-02]", answer: " 행렬의 연산을 수행하고, 관련된 문제를 해결할 수 있다." },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "공통수학 1 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "성취기준 해설",
+                            questions: [
+                                { index: "[10공수1-01-03]", answer: " 다항식의 인수분해는 다음의 경우를 다룬다. a^2+b^2+c^2+2ab+2bc+2ca=(a+b+c)^2, a^3+3a^2b+3ab^2+b^3=(a+b)^3, a^3-3a^2b+3ab^2-b^3=(a-b)^3, a^3+b^3=(a+b)(a^2-ab+b^2), a^3-b^3=(a-b)(a^2+ab+b^2)" },
+                                { index: "[10공수1-02-02]", answer: " 이차방정식은 계수가 실수인 경우만 다루고, 이차방정식은 복소수 범위에서 항상 근을 갖는다는 것을 이해하게 한다." },
+                                { index: "[10공수1-02-06]", answer: " 이차함수의 최대, 최소는 제한된 범위에서만 다룬다." },
+                                { index: "[10공수1-02-07]", answer: " 삼차방정식과 사차방정식은 계수가 실수인 경우만 다루고, 인수분해 공식이나 인수정리, 조립제법을 이용하여 풀 수 있는 경우만을 다룬다." },
+                                { index: "[10공수1-02-08]", answer: " 미지수가 2개인 연립이차방정식은 일차식과 이차식이 각각 한 개씩 주어진 경우, 두 이차식 중 한 이차식이 간단히 인수분해 되는 경우만 다룬다." },
+                                { index: "[10공수1-04-02]", answer: " 행렬의 연산에서는 행렬의 덧셈, 뺄셈, 실수배 및 곱셈을 다루고, 행과 열의 수가 각각 2를 넘지 않는 범위에서 행렬의 곱셈을 할 수 있게 한다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(1) 다항식 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘다항식’ 영역에서는 용어와 기호로 ‘미정계수법, 나머지정리, 인수정리, 조립제법’을 다룬다." },
+                                { index: "2.", answer: "다항식의 곱셈과 인수분해는 중학교에서 학습한 내용을 토대로 고등학교에서 추가된 내용을 이해하게 하고, 복잡한 인수분해 문제는 다루지 않는다." },
+                                { index: "3.", answer: "조립제법은 중학교에서 학습한 다항식을 단항식으로 나누는 연산과 연계하여 이해하게 하고, 구체적인 예를 통하여 그 방법을 간단히 다룬다." },
+                                { index: "4.", answer: "항등식의 성질, 나머지정리와 인수정리를 활용하는 복잡한 문제는 다루지 않는다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(2) 방정식과 부등식 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘방정식과 부등식’ 영역에서는 용어와 기호로 ‘허수단위, 복소수, 실수부분, 허수부분, 허수, 켤레복소수, 실근, 허근, 판별식, 연립부등식, i, a+bi, [켤레a+bi]’를 다룬다. " },
+                                { index: "2.", answer: "복소수의 성질과 사칙연산은 중학교에서 학습한 실수의 성질과 사칙연산과 연계하여 이해하게 하고, 나눗셈은 켤레복소수를 이용하여 계산하게 한다." },
+                                { index: "3.", answer: "이차방정식의 근과 계수의 관계를 활용하거나 판별식을 활용하는 지나치게 복잡한 방정식과 부등식 문제는 다루지 않는다." },
+                                { index: "4.", answer: "이차함수의 그래프와 축 및 직선의 위치 관계, 이차함수의 최대, 최소를 탐구할 때 공학 도구를 이용할 수 있다." },
+                                { index: "5.", answer: "연립부등식은 중학교에서 학습한 연립일차방정식 내용을 토대로 이해하게 한다." },
+                                { index: "6.", answer: "이차함수의 그래프를 이용하여 이차부등식과 연립이차부등식의 해를 탐구할 때 공학 도구를 이용할 수 있다." },
+                                { index: "7.", answer: "방정식과 부등식을 이용하여 실생활 문제를 해결하는 경험을 통해 수학의 유용성을 인식하게 하고, 적절한 문제해결 방법을 찾기 위해 끈기 있게 도전하는 태도를 기르게 한다." },
+                                { index: "8.", answer: "‘삼차방정식’, ‘사차방정식’, ‘연립이차방정식’, ‘연립일차부등식’, ‘이차부등식’, ‘연립이차부등식’ 용어는 교수⋅학습 상황에서 사용할 수 있다. " },
+                            ]
+                        },
+                        {
+                            subTitle: "(3) 경우의 수 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘경우의 수’ 영역에서는 용어와 기호로 ‘합의 법칙, 곱의 법칙, 순열, 계승, 조합, _{n}P_{r}, n!, _{n}C_{r}’을 다룬다. " },
+                                { index: "2.", answer: "중학교에서 학습한 경우의 수와 연계하여 합의 법칙과 곱의 법칙을 간단히 다룬다." },
+                                { index: "3.", answer: "합의 법칙과 곱의 법칙은 구체적인 예를 통하여 이해하게 하고, 이들이 적용되는 상황의 차이점을 설명하게 할 수 있다." },
+                                { index: "4.", answer: "합의 법칙과 곱의 법칙 중 적절한 전략을 사용하여 경우의 수와 관련된 문제를 해결하도록 하되, 지나치게 복잡한 문제는 다루지 않는다." },
+                                { index: "5.", answer: "순열의 수와 조합의 수는 직접 나열하거나 수형도를 이용하는 등 다양한 방법으로 구하게 하고, 지나치게 복잡한 문제는 다루지 않는다." },
+                                { index: "6.", answer: "순열의 수와 조합의 수를 구해 보는 경험을 통해 체계적으로 사고하여 합리적으로 의사 결정하는 태도를 기르게 한다." },
+                                { index: "7.", answer: "경우의 수를 이용하여 실생활 문제를 해결하는 경험을 통해 수학의 유용성을 인식하게 한다."},
+                            ]
+                        },
+                        {
+                            subTitle: "(4) 행렬 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘행렬’ 영역에서는 용어와 기호로 ‘행렬, 행, 열, 성분, n × m 행렬’을 다룬다." },
+                                { index: "2.", answer: "실생활 자료를 직사각형 모양으로 나타낼 수 있는 경우를 찾아보는 활동을 통해 행렬의 유용성을 인식하게 한다." },
+                                { index: "3.", answer: "행렬의 표현과 관련하여 기후변화, 환경 재난 등의 사례를 단순화하여 다룰 수 있으며, 자료의 표현, 이해 및 처리 과정을 경험하게 할 수 있다." },
+                                { index: "4.", answer: "행렬의 연산에 관한 대수적 구조의 성질을 일반화하여 법칙으로 다루지 않으며, 지나치게 복잡한 행렬의 연산 문제는 다루지 않는다." },
+                                { index: "5.", answer: "‘정사각행렬’, ‘영행렬’, ‘단위행렬’ 용어는 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        },
+                    ]
+                }
+            ]
+        },
+        tab6: {
+            title: "공통수학 2",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "공통수학 2 내용체계 표",
+                    imageUrl: "6.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "공통수학 2 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 도형의 방정식",
+                            questions: [
+                                { index: "[10공수2-01-01]", answer: " 선분의 내분을 이해하고, 내분점의 좌표를 계산할 수 있다." },
+                                { index: "[10공수2-01-02]", answer: " 두 직선의 평행 조건과 수직 조건을 탐구하고 이해한다."},
+                                { index: "[10공수2-01-03]", answer: " 점과 직선 사이의 거리를 구하고, 관련된 문제를 해결할 수 있다." },
+                                { index: "[10공수2-01-04]", answer: " 원의 방정식을 구하고, 그래프를 그릴 수 있다." },
+                                { index: "[10공수2-01-05]", answer: " 좌표평면에서 원과 직선의 위치 관계를 판단하고, 이를 활용하여 문제를 해결할 수 있다." },
+                                { index: "[10공수2-01-06]", answer: " 평행이동을 탐구하고, 실생활과 연결하여 문제를 해결할 수 있다." },
+                                { index: "[10공수2-01-07]", answer: " 원점, x축, y축, 직선 y=x에 대한 대칭이동을 탐구하고, 실생활과 연결하여 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 집합과 명제",
+                            questions: [
+                                { index: "[10공수2-02-01]", answer: " 집합의 개념을 이해하고, 집합을 표현할 수 있다." },
+                                { index: "[10공수2-02-02]", answer: " 두 집합 사이의 포함관계를 판단할 수 있다." },
+                                { index: "[10공수2-02-03]", answer: " 집합의 연산을 수행하고, 벤 다이어그램을 이용하여 나타낼 수 있다." },
+                                { index: "[10공수2-02-04]", answer: " 명제와 조건의 뜻을 알고, ‘모든’, ‘어떤’을 포함한 명제를 이해하고 설명할 수 있다."},
+                                { index: "[10공수2-02-05]", answer: " 명제의 역과 대우를 이해하고 설명할 수 있다."},
+                                { index: "[10공수2-02-06]", answer: " 충분조건과 필요조건을 이해하고 판단할 수 있다."},
+                                { index: "[10공수2-02-07]", answer: " 대우를 이용한 증명법과 귀류법을 이해하고 관련된 명제를 증명할 수 있다."},
+                                { index: "[10공수2-02-08]", answer: " 절대부등식의 뜻을 알고, 간단한 절대부등식을 증명할 수 있다."},
+                            ]
+                        },
+                        {
+                            subTitle: "3. 함수와 그래프",
+                            questions: [
+                                { index: "[10공수2-03-01]", answer: " 함수의 개념을 설명하고, 그 그래프를 이해한다." },
+                                { index: "[10공수2-03-02]", answer: " 함수의 합성을 설명하고, 합성함수를 구할 수 있다." },
+                                { index: "[10공수2-03-03]", answer: " 역함수의 개념을 설명하고, 역함수를 구할 수 있다." },
+                                { index: "[10공수2-03-04]", answer: " 유리함수 {ax+b} over {cx+d}의 그래프를 그릴 수 있고, 그 그래프의 성질을 탐구할 수 있다." },
+                                { index: "[10공수2-03-05]", answer: " 무리함수 sqrt {ax+b~}의 그래프를 그릴 수 있고, 그 그래프의 성질을 탐구할 수 있다." },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "공통수학 2 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "성취기준 해설",
+                            questions: [
+                                { index: "[10공수2-01-01]", answer: " 선분의 내분을 도입하기 전에 두 점 사이의 거리를 구하는 방법을 다루고, 내분은 수직선 위에서, 좌표평면 위에서 구할 수 있도록 점차 확장하여 다룬다." },
+                                { index: "[10공수2-02-03]", answer: " 집합의 연산은 합집합, 교집합, 여집합, 차집합을 다루고, 집합의 연산에 관한 교환법칙, 결합법칙, 분배법칙, 드모르간의 법칙은 벤 다이어그램으로 확인하는 정도로 간단히 다룬다." },
+                                { index: "[10공수2-02-04]", answer: " 명제와 조건의 뜻은 수학적인 문장을 이해하는 수준에서 간단히 다룬다. ‘모든’, ‘어떤’을 포함한 명제는 구체적인 상황을 이용하여 도입한다." },
+                                { index: "[10공수2-02-07]", answer: " 대우를 이용한 증명법과 귀류법을 이용한 명제의 증명은 간단한 것만 다룬다." },
+                                { index: "[10공수2-03-01]", answer: " 함수의 개념은 중학교에서 학습한 내용을 확장하여 주어진 두 집합 사이의 대응 관계로 이해하게 한다." },
+                                { index: "[10공수2-03-04]", answer: " 유리식은 유리함수의 의미를 이해할 수 있을 정도로 간단히 다루고, 유리함수는 {ax+b} over {cx+d}의 기본적인 형태를 중심으로 간단한 문제만 다룬다. " },
+                                { index: "[10공수2-03-05]", answer: " 무리식은 무리함수의 의미를 이해할 수 있을 정도로 간단히 다루고, 무리함수는 sqrt {ax+b~}의 기본적인 형태를 중심으로 간단한 문제만 다룬다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(1) 도형의 방정식 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘도형의 방정식’ 영역에서는 용어와 기호로 ‘내분, 대칭이동, f(x,y)=0’을 다룬다. " },
+                                { index: "2.", answer: "도형의 방정식 학습을 통해 대수와 기하를 연결하는 사고의 전환으로 수학에 대한 흥미와 관심을 갖도록 다양한 교수⋅학습 경험을 제공한다. " },
+                                { index: "3.", answer: "두 직선의 평행 조건과 수직 조건은 중학교에서 학습한 일차방정식과 일차함수의 그래프, 직선의 방정식과 연계하여 다룰 수 있다." },
+                                { index: "4.", answer: "직선의 방정식, 원의 방정식, 도형의 이동을 다룰 때 공학 도구를 이용할 수 있다. " },
+                                { index: "5.", answer: "도형의 이동을 실생활에 적용해 보는 활동을 통해 그 유용성을 인식하게 한다." },
+                                { index: "6.", answer: "도형의 방정식은 도형을 좌표평면에서 다룰 수 있음을 이해하는 수준에서 다루고, 계산이 지나치게 복잡한 문제는 다루지 않는다."},
+                                { index: "7.", answer: "좌표축의 평행이동은 다루지 않는다."},
+                                { index: "8.", answer: "‘내분점’, ‘원의 방정식’ 용어는 교수⋅학습 상황에서 사용할 수 있다."},
+                            ]
+                        },
+                        {
+                            subTitle: "(2) 집합과 명제 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘집합과 명제’ 영역에서는 용어와 기호로 ‘집합, 원소, 공집합, 부분집합, 진부분집합, 벤 다이어그램, 합집합, 교집합, 전체집합, 여집합, 차집합, (집합의) 서로소, (집합의) 교환법칙, (집합의) 결합법칙, (집합의) 분배법칙, 드모르간의 법칙, 명제, 가정, 결론, 정의, 정리, 조건, 진리집합, 부정, 역, 대우, 충분조건, 필요조건, 필요충분조건, 귀류법, 절대부등식,  a ∈ A, b ∉ B, ∅, A ⊂ B, A ⊄ B, A = B, A ≠ B, A ∪ B, A ∩ B, U, A^C , A - B, n(A), ~p, p → q, p ⇒ q, p ⇔ q’를 다룬다. " },
+                                { index: "2.", answer: "집합의 개념이나 집합의 포함관계는 개념을 이해하는 수준에서 간단히 평가한다." },
+                                { index: "3.", answer: "충분조건, 필요조건, 필요충분조건은 구체적인 예를 통하여 이해하게 한다." },
+                                { index: "4.", answer: "증명을 지도할 때는 직관적인 이해로부터 시작하여 점진적으로 형식화하게 한다." },
+                                { index: "5.", answer: "집합과 명제를 이용한 수학적 근거를 바탕으로 비판적으로 사고하는 태도를 기르게 한다. " },
+                                { index: "6.", answer: "수학의 여러 내용 영역 및 실생활과 연결하여 집합과 명제의 유용성을 인식하게 한다. " },
+                                { index: "7.", answer: "‘원소나열법’, ‘조건제시법’, ‘유한집합’, ‘무한집합’, ‘서로 같다’ 용어는 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(3) 함수와 그래프 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘함수와 그래프’ 영역에서는 용어와 기호로 ‘정의역, 치역, 공역, 대응, 일대일대응, 항등함수, 상수함수, 일대일함수, 합성함수, 역함수, 다항함수, 유리식, 무리식, 유리함수, 점근선, 무리함수, f: X → Y, g ∘ f, (g ∘ f)(x), y=g(f(x)), f^-1, y=f^-1(x)’를 다룬다. " },
+                                { index: "2.", answer: "일대일대응, 항등함수, 상수함수, 일대일함수, 합성함수, 역함수의 의미는 구체적인 예를 통해 이해하게 한다." },
+                                { index: "3.", answer: "함수의 그래프를 그리고 여러 가지 성질을 탐구할 때 공학 도구를 이용할 수 있다." },
+                                { index: "4.", answer: "함수의 그래프와 그 성질을 다룰 때 지나치게 복잡한 문제는 다루지 않는다." },
+                                { index: "5.", answer: "함수를 이용하여 자연 현상, 사회 현상에 대한 실생활 문제를 해결하는 활동을 통해 함수와 그래프의 유용성을 인식하게 한다." },
+                            ]
+                        },
+                    ]
+                }
+            ]
+        },
+        tab7: {
+            title: "대수",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "대수 내용체계 표",
+                    imageUrl: "7.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "대수 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 지수함수와 로그함수",
+                            questions: [
+                                { index: "[12대수01-01]", answer: " 거듭제곱과 거듭제곱근의 뜻을 알고, 그 성질을 이용하여 계산할 수 있다." },
+                                { index: "[12대수01-02]", answer: " 지수가 유리수, 실수까지 확장될 수 있음을 이해하고, 이를 설명할 수 있다." },
+                                { index: "[12대수01-03]", answer: " 지수법칙을 이해하고, 이를 이용하여 식을 간단히 나타낼 수 있다." },
+                                { index: "[12대수01-04]", answer: " 로그의 뜻을 알고, 그 성질을 이용하여 계산할 수 있다." },
+                                { index: "[12대수01-05]", answer: " 상용로그를 이해하고, 이를 실생활과 연결하여 문제를 해결할 수 있다. " },
+                                { index: "[12대수01-06]", answer: " 지수함수와 로그함수의 뜻을 알고, 이를 설명할 수 있다." },
+                                { index: "[12대수01-07]", answer: " 지수함수와 로그함수의 그래프를 그릴 수 있고, 그 성질을 설명할 수 있다." },
+                                { index: "[12대수01-08]", answer: " 지수함수, 로그함수를 활용하여 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 삼각함수",
+                            questions: [
+                                { index: "[12대수02-01]", answer: "일반각과 호도법의 뜻을 알고, 그 관계를 설명할 수 있다." },
+                                { index: "[12대수02-02]", answer: "삼각함수의 개념을 이해하여 사인함수, 코사인함수, 탄젠트함수의 그래프를 그리고, 그 성질을 설명할 수 있다." },
+                                { index: "[12대수02-03]", answer: "사인법칙과 코사인법칙을 이해하고, 실생활 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 수열",
+                            questions: [
+                                { index: "[12대수03-01]", answer: "수열의 뜻을 설명할 수 있다." },
+                                { index: "[12대수03-02]", answer: "등차수열의 뜻을 알고, 일반항, 첫째항부터 제 n항까지의 합을 구할 수 있다." },
+                                { index: "[12대수03-03]", answer: "등비수열의 뜻을 알고, 일반항, 첫째항부터 제 n항까지의 합을 구할 수 있다." },
+                                { index: "[12대수03-04]", answer: "∑의 뜻과 성질을 이해하고, 이를 활용하여 문제를 해결할 수 있다." },
+                                { index: "[12대수03-05]", answer: "여러 가지 수열의 첫째항부터 제 n항까지의 합을 구하는 방법을 설명할 수 있다." },
+                                { index: "[12대수03-06]", answer: "수열의 귀납적 정의를 설명할 수 있다." },
+                                { index: "[12대수03-07]", answer: "수학적 귀납법의 원리를 이해하고, 이를 이용하여 명제를 증명할 수 있다." },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "대수 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "대수 성취기준 해설",
+                            questions: [
+                                { index: "[12대수01-02]", answer: " 지수가 유리수 및 실수인 경우는 밑이 양수인 조건이 필요함을 이해하게 한다. 지수가 실수인 경우는 직관적으로 다룬다." },
+                                { index: "[12대수01-04]", answer: " 로그의 성질은 지수의 성질과 관련지어 이해하게 한다. " },
+                                { index: "[12대수01-07]", answer: " 지수함수와 로그함수는 역함수 관계임을 그래프를 통해 확인하게 한다." },
+                                { index: "[12대수02-02]", answer: " 삼각함수의 개념은 중학교에서 학습한 삼각비와 연계하여 이해하게 하며, 삼각함수의 성질은 삼각함수의 그래프의 성질을 이해하는 데 필요한 정도로 간단히 다룬다. " },
+                                { index: "[12대수02-03]", answer: " 사인법칙과 코사인법칙을 이용하여 삼각형의 각의 크기와 변의 길이 사이의 관계를 이해하고 삼각형의 넓이를 다양한 방법으로 구할 수 있게 한다. " },
+                                { index: "[12대수03-05]", answer: " 여러 가지 수열의 합에서는 자연수의 거듭제곱의 합 sum _{k=1} ^{n} k, sum _{k=1} ^{n} k^2, sum _{k=1} ^{n} k^3 과 수열의 합이 간단한 것만 다룬다." },
+                                { index: "[12대수03-07]", answer: " 수학적 귀납법을 이용한 증명은 원리를 이해할 수 있는 정도로 간단히 다룬다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(1) 지수함수와 로그함수 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘지수함수와 로그함수’ 영역에서는 용어와 기호로 ‘거듭제곱근, 지수, 로그, (로그의) 밑, 진수, 상용로그, 지수함수, 로그함수, root {n} of {a}, log_a N, log N’을 다룬다." },
+                                { index: "2.", answer: "수를 표현하는 과정에서 지수나 로그를 이용할 때 편리함을 인식하게 한다." },
+                                { index: "3.", answer: "지수와 로그 및 지수함수와 로그함수를 다룰 때 공학 도구를 이용할 수 있다." },
+                                { index: "4.", answer: "구체적인 자연 현상이나 사회 현상을 지수함수와 로그함수로 표현하고 문제를 해결해 봄으로써 유용성을 인식하게 한다." },
+                                { index: "5.", answer: "지수와 로그 및 지수함수와 로그함수를 다룰 때, 지나치게 복잡한 계산을 포함하는 문제는 다루지 않는다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(2) 삼각함수 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘삼각함수’ 영역에서는 용어와 기호로 ‘시초선, 동경, 일반각, 호도법, 라디안, 주기, 주기함수, 삼각함수, 사인함수, 코사인함수, 탄젠트함수, 사인법칙, 코사인법칙, sinx, cosx, tanx’를 다룬다." },
+                                { index: "2.", answer: "삼각함수의 그래프를 그리거나 삼각함수와 관련된 문제를 해결할 때 공학 도구를 이용할 수 있다." },
+                                { index: "3.", answer: "삼각함수가 포함된 방정식과 부등식은 삼각함수의 그래프를 해석하거나 사인법칙과 코사인법칙을 활용하여 문제를 해결하는 과정에서 나타나는 간단한 경우만 다루되, 주어진 구간 안에서 해를 구하는 것만 다룬다." },
+                                { index: "4.", answer: "사인법칙과 코사인법칙을 활용하여 실생활 문제를 해결해 봄으로써 삼각함수의 유용성을 인식하게 한다." },
+                                { index: "5.", answer: "다양한 현상의 문제를 삼각함수를 이용하여 해결하게 함으로써 깊이 있는 학습이 이루어지도록 한다." },
+                                { index: "6.", answer: "삼각함수와 그 그래프의 성질에 대한 평가에서는 기본적인 삼각함수의 그래프와 그 성질에 대한 이해 능력을 평가하는 데 중점을 두고, 지나치게 복잡한 문제는 다루지 않는다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(3) 수열 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘수열’ 영역에서는 용어와 기호로 ‘수열, 항, 일반항, 공차, 등차수열, 등차중항, 공비, 등비수열, 등비중항, 귀납적 정의, 수학적 귀납법, a_n , {a_n},  S_n , sum _{k=1} ^{n} a_k’를 다룬다." },
+                                { index: "2.", answer: "등비수열과 그 합을 이용하여 문제를 해결할 수 있는 능력을 평가할 때 연금의 일시 지급이나 대출금 상환 등과 같이 지나치게 복잡한 상황을 포함하는 문제는 다루지 않는다." },
+                                { index: "3.", answer: "수열과 관련된 여러 가지 문제를 귀납적으로 표현할 수 있게 하고, 귀납적으로 정의된 수열의 일반항을 구하는 문제는 다루지 않는다." },
+                                { index: "4.", answer: "수학적 귀납법을 이용하여 명제를 증명하는 과정을 통해 논리적으로 사고하는 태도를 기르게 한다." },
+                            ]
+                        },
+                    ]
+                }
+            ]
+        },
+        tab8: {
+            title: "확률과 통계",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "확률과 통계 내용체계 표",
+                    imageUrl: "8.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "확률과 통계 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 경우의 수",
+                            questions: [
+                                { index: "[12확통01-01]", answer: " 중복순열, 같은 것이 있는 순열을 이해하고, 그 순열의 수를 구하는 방법을 설명할 수 있다." },
+                                { index: "[12확통01-02]", answer: " 중복조합을 이해하고, 중복조합의 수를 구하는 방법을 설명할 수 있다."},
+                                { index: "[12확통01-03]", answer: " 이항정리를 이해하고, 이를 활용하여 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 확률",
+                            questions: [
+                                { index: "[12확통02-02]", answer: " 자료를 줄기와 잎 그림, 도수분포표, 히스토그램, 도수분포다각형으로 나타내고 해석할 수 있다." },
+                                { index: "[12확통02-03]", answer: " 상대도수를 구하고, 상대도수의 분포를 표나 그래프로 나타내고 해석할 수 있다." },
+                                { index: "[12확통02-04]", answer: " 통계적 탐구 문제를 설정하고, 공학 도구를 이용하여 자료를 수집하여 분석하고, 그 결과를 해석할 수 있다." },
+                                { index: "[12확통02-05]", answer: " 대푯값과 산포도를 구하고, 자료의 분포를 해석할 수 있다."},
+                                { index: "[12확통02-06]", answer: " 자료의 분포를 비교하고, 그 결과를 해석할 수 있다."},
+                            ]
+                        },
+                        {
+                            subTitle: "3. 통계",
+                            questions: [
+                                { index: "[12확통03-01]", answer: " 확률변수와 확률분포의 뜻을 설명할 수 있다." },
+                                { index: "[12확통03-02]", answer: " 이산확률변수의 기댓값(평균)과 표준편차를 구할 수 있다." },
+                                { index: "[12확통03-03]", answer: " 이항분포의 뜻과 성질을 이해하고, 평균과 표준편차를 구할 수 있다." },
+                                { index: "[12확통03-04]", answer: " 정규분포의 뜻과 성질을 이해하고, 이항분포와의 관계를 설명할 수 있다."},
+                                { index: "[12확통03-05]", answer: " 모집단과 표본의 뜻을 알고, 표본추출의 방법을 설명할 수 있다." },
+                                { index: "[12확통03-06]", answer: " 표본평균과 모평균, 표본비율과 모비율의 관계를 이해하고 설명할 수 있다." },
+                                { index: "[12확통03-07]", answer: " 공학 도구를 이용하여 모평균 및 모비율을 추정하고 그 결과를 해석할 수 있다." },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "확률과 통계 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "확률과 통계 성취기준 해설",
+                            questions: [
+                                { index: "[12확통01-01]", answer: " 중복순열, 같은 것이 있는 순열 등을 이해하는 과정에서 필요한 경우, <공통수학1>의 경우의 수와 연계되는 내용은 간단히 다룰 수 있다." },
+                                { index: "[12확통01-02]", answer: " 중복조합을 이해하는 과정에서 필요한 경우, <공통수학1>의 경우의 수와 연계되는 내용은 간단히 다룰 수 있다." },
+                                { index: "[12확통02-01]", answer: " 확률 개념을 도입할 때 수학적 확률과 통계적 확률을 사용하며, 중학교에서 학습한 확률과 연계되는 내용은 필요한 경우에만 간단히 다룬다." },
+                                { index: "[12확통03-05]", answer: " 표본추출이 모집단의 성질을 예측하는 기본조건임을 이해하게 한다. 표본의 추출방법을 임의추출로 제한하고 구체적인 예로 간단히 다룬다. " },
+                                { index: "[12확통03-06]", answer: " 표본평균 및 표본비율은 추출한 표본에 따라 다른 값을 가질 수 있는 확률변수임을 알게 하고, 모평균 및 모비율의 추정에 관한 수학적 원리를 이해하게 한다. 모평균 추정은 모집단의 분포가 정규분포인 경우만 다루고, 모비율의 추정은 표본의 크기가 큰 경우만 다룬다." },
+                                { index: "[12확통03-07]", answer: " 공학 도구를 이용하여 실생활 자료에서 모평균 또는 모비율을 추정하고, 그 결과를 해석하는 과정을 통해 유용성을 인식할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(1) 경우의 수 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘경우의 수’ 영역에서는 용어와 기호로 ‘중복순열, 중복조합, 이항정리, 이항계수, 파스칼의 삼각형, {} _{n} SMALLPROD _{r}, {} _{n} rm H it rm _{r}’을 다룬다." },
+                                { index: "2.", answer: "중복순열과 중복조합을 실생활 문제해결에 활용해 봄으로써 그 유용성을 인식하게 한다." },
+                                { index: "3.", answer: "항이 세 개 이상인 다항정리에 관한 문제와 허수단위 i가 포함된 이항정리에 관한 문제는 다루지 않는다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(2) 확률 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘확률’ 영역에서는 용어와 기호로 ‘시행, 통계적 확률, 수학적 확률, 여사건, 배반사건, 조건부확률, 종속, 독립, 독립시행, P(A), P(B|A)’를 다룬다." },
+                                { index: "2.", answer: "통계적 확률과 수학적 확률의 관계를 이해하고 통계적 확률을 다룰 때 충분히 많은 횟수의 시행을 구현하기 위하여 공학 도구를 이용할 수 있다." },
+                                { index: "3.", answer: "실생활의 소재를 활용하여 조건부확률의 필요성과 유용성을 인식하도록 다양한 학습 경험을 제공한다." },
+                                { index: "4.", answer: "조건부확률은 조건이 주어진 상황에서의 가능성을 수치화한 확률로 이해하게 하고, 사건의 시간적 순서나 인과관계로 해석하지 않도록 한다." },
+                                { index: "5.", answer: "세 사건 이상에서 서로 배반이거나 서로 독립임을 가정한 복잡한 문제는 다루지 않는다." },
+                                { index: "6.", answer: "사건이 일어날 가능성을 수치화하는 경험을 통해 문제를 해결하고 미래를 예측하며 합리적으로 의사 결정할 수 있게 한다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(3) 통계 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘통계’ 영역에서는 용어와 기호로 ‘확률변수, 이산확률변수, 확률분포, 연속확률변수, 기댓값, 이항분포, 큰 수의 법칙, 정규분포, 표준정규분포, 모집단, 표본, 전수조사, 표본조사, 임의추출, 모평균, 모분산, 모표준편차, 표본평균, 표본분산, 표본표준편차, 모비율, 표본비율, 추정, 신뢰도, 신뢰구간, P(X=x), E(X), V(X), σ(X), B(n,p), N(μ,σ²), N(0,1), bar{X}, bar{X``}, S^2, S, hat{p}’을 다룬다." },
+                                { index: "2.", answer: "이항분포의 평균과 분산을 구하는 식을 증명하는 문제는 다루지 않는다." },
+                                { index: "3.", answer: "정규분포를 따르는 확률변수에서 확률을 구할 때, 표준정규분포로 변환하여 확률을 구할 수 있게 한다. 공학 도구를 이용하여 이항분포 B(n,p)에서 p의 값을 고정하고 n의 값을 변화시키면서 이항분포 그래프와 정규분포 그래프의 관계를 살펴보게 할 수 있다." },
+                                { index: "4.", answer: "모평균 및 모비율의 추정을 지도할 때, 복잡한 신뢰구간의 계산은 다루지 않는다." },
+                                { index: "5.", answer: "불확실성의 해석에 대한 통계의 유용성을 인식하고 합리적인 판단을 추구함으로써 민주 시민으로서의 소양을 기를 수 있게 한다." },
+                                { index: "6.", answer: "모집단의 설정, 표본추출, 모평균 또는 모비율의 추정과 그 결과의 해석을 평가할 때는 통계적 문제해결에 기반한 평가를 할 수 있다." },
+                                { index: "7.", answer: "‘확률질량함수’, ‘확률밀도함수’ 용어는 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        },
+                    ]
+                }
+            ]
+        },
+        tab9: {
+            title: "미적분 Ⅰ",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "미적분 Ⅰ 내용체계 표",
+                    imageUrl: "9.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "미적분 Ⅰ 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 함수의 극한과 연속",
+                            questions: [
+                                { index: "[12미적Ⅰ-01-01]", answer: " 함수의 극한의 뜻을 알고, 이를 설명할 수 있다." },
+                                { index: "[12미적Ⅰ-01-02]", answer: " 함수의 극한에 대한 성질을 이해하고, 함수의 극한값을 구할 수 있다." },
+                                { index: "[12미적Ⅰ-01-03]", answer: " 함수의 연속을 극한으로 탐구하고 이해한다." },
+                                { index: "[12미적Ⅰ-01-04]", answer: " 연속함수의 성질을 이해하고, 이를 활용하여 문제를 해결할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 미분",
+                            questions: [
+                                { index: "[12미적Ⅰ-02-01]", answer: " 미분계수를 이해하고, 이를 구할 수 있다." },
+                                { index: "[12미적Ⅰ-02-02]", answer: " 함수의 미분가능성과 연속성의 관계를 설명하고, 이를 활용할 수 있다." },
+                                { index: "[12미적Ⅰ-02-03]", answer: " 함수 y=x^n (n은 양의 정수)의 도함수를 구할 수 있다." },
+                                { index: "[12미적Ⅰ-02-04]", answer: " 함수의 실수배, 합, 차, 곱의 미분법을 알고, 다항함수의 도함수를 구할 수 있다." },
+                                { index: "[12미적Ⅰ-02-05]", answer: " 미분계수와 접선의 기울기의 관계를 이해하고, 접선의 방정식을 구할 수 있다." },
+                                { index: "[12미적Ⅰ-02-06]", answer: " 함수에 대한 평균값 정리를 설명하고, 이를 활용할 수 있다." },
+                                { index: "[12미적Ⅰ-02-07]", answer: " 함수의 증가와 감소, 극대와 극소를 판정하고 설명할 수 있다." },
+                                { index: "[12미적Ⅰ-02-08]", answer: " 함수의 그래프의 개형을 그릴 수 있다." },
+                                { index: "[12미적Ⅰ-02-09]", answer: " 방정식과 부등식에 대한 문제를 해결할 수 있다." },
+                                { index: "[12미적Ⅰ-02-10]", answer: " 미분을 속도와 가속도에 대한 문제에 활용하고, 그 유용성을 인식할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 적분",
+                            questions: [
+                                { index: "[12미적Ⅰ-03-01]", answer: " 부정적분의 뜻을 알고, 이를 설명할 수 있다." },
+                                { index: "[12미적Ⅰ-03-02]", answer: " 함수의 실수배, 합, 차의 부정적분을 알고, 다항함수의 부정적분을 구할 수 있다." },
+                                { index: "[12미적Ⅰ-03-03]", answer: " 정적분의 개념을 탐구하고, 그 성질을 이해한다." },
+                                { index: "[12미적Ⅰ-03-04]", answer: " 부정적분과 정적분의 관계를 이해하고, 다항함수의 정적분을 구할 수 있다." },
+                                { index: "[12미적Ⅰ-03-05]", answer: " 곡선으로 둘러싸인 도형의 넓이에 대한 문제를 해결할 수 있다." },
+                                { index: "[12미적Ⅰ-03-06]", answer: " 적분을 속도와 거리에 대한 문제에 활용하고, 그 유용성을 인식할 수 있다." },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "미적분 Ⅰ 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "미적분 Ⅰ 성취기준 해설",
+                            questions: [
+                                { index: "[12미적Ⅰ-01-04]", answer: " 연속함수의 성질을 이용하여 함수의 최대⋅최소 정리, 사잇값 정리 등을 이해하게 한다." },
+                                { index: "[12미적Ⅰ-02-01]", answer: " 미분계수의 뜻을 알고, 그 기하학적 의미를 이해하게 한다." },
+                                { index: "[12미적Ⅰ-02-10]", answer: " 속도와 가속도에 대한 문제는 직선 운동에 한하여 다룬다. " },
+                                { index: "[12미적Ⅰ-03-03]", answer: " 닫힌구간 [a,b]에서 연속함수 f(x)의 함숫값이 음이 아닌 경우 함수 f(x)의 그래프와 x축으로 둘러싸인 도형의 넓이를 f(x)의 a에서 b까지의 정적분이라 하고, 이를 일반적인 연속함수에 대한 정적분의 정의로 확장한다." },
+                                { index: "[12미적Ⅰ-03-06]", answer: " 위치, 속도, 거리 등에 대한 문제는 직선 운동에 한하여 다룬다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(1) 함수의 극한과 연속 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘함수의 극한과 연속’ 영역에서는 용어와 기호로 ‘구간, 닫힌구간, 열린구간, 반닫힌(반열린) 구간, 수렴, 극한(값), 좌극한, 우극한, 발산, 무한대, 연속, 불연속, 연속함수, 최대⋅최소 정리, 사잇값 정리, [a,b], (a,b), [a,b), (a,b], lim _{x` -> `a}f(x), lim _{x` -> `a+}f(x), lim _{x` -> `a-}f(x), ∞’를 다룬다." },
+                                { index: "2.", answer: "무한을 수학적으로 다루는 방법에 흥미와 관심을 갖도록 다양한 교수⋅학습 경험을 제공한다." },
+                                { index: "3.", answer: "함수의 극한과 연속에 대한 뜻과 성질을 그래프를 통해 직관적으로 이해하게 하고, 이때 공학 도구를 이용할 수 있다." },
+                                { index: "4.", answer: "함수의 연속성을 판정하는 과정에서 체계적으로 사고하여 의사 결정하는 태도를 기르게 한다." },
+                                { index: "5.", answer: "함수의 극한과 연속의 뜻과 성질에 대한 이해 여부를 평가할 때, 복잡한 합성함수나 절댓값이 여러 개 포함된 함수와 같이 지나치게 복잡한 함수를 포함하는 문제는 다루지 않는다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(2) 미분 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘미분’ 영역에서는 용어와 기호로 ‘증분, 평균변화율, 순간변화율, 미분계수, 미분가능, 도함수, 롤의 정리, 평균값 정리, 증가, 감소, 극대, 극소, 극값, 극댓값, 극솟값, Δx, Δy, f'(x), y', {dy} over {dx}, {d} over {dx} f(x)’를 다룬다." },
+                                { index: "2.", answer: "미분계수의 기하적 의미를 다룰 때 공학 도구를 이용할 수 있다." },
+                                { index: "3.", answer: "구체적인 자연 현상이나 사회 현상을 이해하는 과정에서 미분의 유용성과 가치를 인식하도록 다양한 교수⋅학습 경험을 제공한다." },
+                                { index: "4.", answer: "도함수의 기본 성질을 이해하고 활용할 수 있는 능력을 평가하는 데 중점을 두고, 지나치게 복잡한 계산을 포함하는 문제는 다루지 않는다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(3) 적분 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘적분’ 영역에서는 용어와 기호로 ‘부정적분, 적분상수, 정적분, int _{} ^{} {} f(x)`dx, int _{a} ^{b} {} f(x)`dx, LEFT [ F(x)` RIGHT ] _{a} ^{b}’를 다룬다." },
+                                { index: "2.", answer: "구체적인 자연 현상이나 사회 현상을 이해하는 과정에서 적분의 유용성과 가치를 인식하도록 다양한 교수⋅학습 경험을 제공한다." },
+                                { index: "3.", answer: "부정적분의 기본 성질을 이해하고 활용할 수 있는 능력을 평가할 때, 지나치게 복잡한 계산을 포함하는 문제는 다루지 않는다." },
+                                { index: "4.", answer: "정적분의 활용에서 지나치게 복잡한 문제는 다루지 않는다." },
+                                { index: "5.", answer: "‘피적분함수’, ‘원시함수’, ‘위끝’, ‘아래끝’, ‘미적분의 기본정리’ 용어는 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        },
+                    ]
+                }
+            ]
+        },
+        tab10: {
+            title: "미적분 Ⅱ",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "미적분 Ⅱ 내용체계 표",
+                    imageUrl: "10.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "미적분 Ⅱ 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 수열의 극한",
+                            questions: [
+                                { index: "[12미적Ⅱ-01-01]", answer: " 수열의 수렴, 발산의 뜻을 알고, 이를 판정할 수 있다." },
+                                { index: "[12미적Ⅱ-01-02]", answer: " 수열의 극한에 대한 성질을 이해하고, 이를 활용하여 극한값을 구하는 방법을 설명할 수 있다." },
+                                { index: "[12미적Ⅱ-01-03]", answer: " 등비수열의 수렴, 발산을 판정하고, 수렴하는 경우 그 극한값을 구할 수 있다." },
+                                { index: "[12미적Ⅱ-01-04]", answer: " 급수의 수렴, 발산의 뜻을 알고, 이를 판정할 수 있다." },
+                                { index: "[12미적Ⅱ-01-05]", answer: " 등비급수의 합을 구하고, 이를 활용할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 미분법",
+                            questions: [
+                                { index: "[12미적Ⅱ-02-01]", answer: " 지수함수와 로그함수의 극한을 구하고 미분할 수 있다." },
+                                { index: "[12미적Ⅱ-02-02]", answer: " 삼각함수의 덧셈정리를 설명하고, 이를 활용할 수 있다." },
+                                { index: "[12미적Ⅱ-02-03]", answer: " 삼각함수의 극한을 구하고, 사인함수와 코사인함수를 미분할 수 있다." },
+                                { index: "[12미적Ⅱ-02-04]", answer: " 함수의 몫을 미분할 수 있다." },
+                                { index: "[12미적Ⅱ-02-05]", answer: " 합성함수를 미분할 수 있다." },
+                                { index: "[12미적Ⅱ-02-06]", answer: " 매개변수로 나타낸 함수를 미분할 수 있다." },
+                                { index: "[12미적Ⅱ-02-07]", answer: " 음함수와 역함수를 미분할 수 있다." },
+                                { index: "[12미적Ⅱ-02-08]", answer: " 다양한 곡선의 접선의 방정식을 구할 수 있다." },
+                                { index: "[12미적Ⅱ-02-09]", answer: " 함수의 그래프의 개형을 그릴 수 있다." },
+                                { index: "[12미적Ⅱ-02-10]", answer: " 방정식과 부등식에 대한 문제를 해결할 수 있다." },
+                                { index: "[12미적Ⅱ-02-11]", answer: " 미분을 속도와 가속도에 대한 문제에 활용하고, 그 유용성을 인식할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 적분법",
+                            questions: [
+                                { index: "[12미적Ⅱ-03-01]", answer: " y=x^n (n은 실수), 지수함수, 삼각함수의 부정적분과 정적분을 구할 수 있다." },
+                                { index: "[12미적Ⅱ-03-02]", answer: " 치환적분법을 이해하고, 이를 활용할 수 있다." },
+                                { index: "[12미적Ⅱ-03-03]", answer: " 부분적분법을 이해하고, 이를 활용할 수 있다." },
+                                { index: "[12미적Ⅱ-03-04]", answer: " 정적분과 급수의 합 사이의 관계를 탐구하고 이해한다." },
+                                { index: "[12미적Ⅱ-03-05]", answer: " 곡선으로 둘러싸인 도형의 넓이에 대한 문제를 해결할 수 있다." },
+                                { index: "[12미적Ⅱ-03-06]", answer: " 입체도형의 부피에 대한 문제를 해결할 수 있다." },
+                                { index: "[12미적Ⅱ-03-07]", answer: " 적분을 속도와 거리에 대한 문제에 활용하고, 그 유용성을 인식할 수 있다."},
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "미적분 Ⅱ 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "미적분 Ⅱ 성취기준 해설",
+                            questions: [
+                                { index: "[12미적Ⅱ-02-01]", answer: " 지수함수와 로그함수의 극한은 지수함수 e^x 와 로그함수 lnx의 도함수를 구하는 데 필요한 정도로 간단히 다룬다." },
+                                { index: "[12미적Ⅱ-02-03]", answer: " 삼각함수의 극한은 삼각함수 sin x, cos x의 도함수를 구하는 데 필요한 정도로 간단히 다룬다." },
+                                { index: "[12미적Ⅱ-02-09]", answer: " 위로 볼록, 아래로 볼록과 변곡점을 설명하기 위해 이계도함수의 기하적 의미를 다룬다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(1) 수열의 극한 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘수열의 극한’ 영역에서는 용어와 기호로 ‘급수, 부분합, 급수의 합, 등비급수, lim _{n -> ∞}a_n , sum _{n=1} ^{∞} a_n ’을 다룬다." },
+                                { index: "2.", answer: "무한을 수학적으로 다루는 방법에 흥미와 관심을 갖도록 다양한 학습 경험을 제공한다." },
+                                { index: "3.", answer: "수열이나 급수의 수렴, 발산을 다룰 때 공학 도구를 이용할 수 있다." },
+                                { index: "4.", answer: "급수의 수렴, 발산을 판정하는 과정에서 체계적으로 사고하여 의사 결정하는 태도를 기르게 한다." },
+                                { index: "5.", answer: "급수의 계산에서 일반항이 등차수열과 등비수열의 곱으로 표현되는 경우와 같이 지나치게 복잡한 문제는 다루지 않는다." },
+                                { index: "6.", answer: "기호 lim _{n -> ∞}S_n 은 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(2) 미분법 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘미분법’ 영역에서는 용어와 기호로 ‘자연로그, 덧셈정리, 매개변수, 음함수, 이계도함수, 변곡점, e, e^x , lnx, secx, cscx, cotx, f''(x), y'', {d^2 y} over {dx^2}, {d^2} over {dx^2} f(x)’를 다룬다." },
+                                { index: "2.", answer: "매개변수로 나타낸 함수와 음함수는 간단한 것만 다룬다." },
+                                { index: "3.", answer: "구체적인 자연 현상이나 사회 현상을 도함수를 통해 이해하게 함으로써 미분의 유용성과 가치를 인식하게 한다." },
+                                { index: "4.", answer: "도함수의 기본 성질을 이해하고 활용할 수 있는 능력을 평가할 때, 지나치게 복잡한 계산을 포함하는 문제는 다루지 않는다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(3) 적분법 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘적분법’ 영역에서는 용어와 기호로 ‘치환적분법, 부분적분법’을 다룬다." },
+                                { index: "2.", answer: "정적분의 다양한 문제해결 과정을 통해 적분의 유용성과 가치를 인식하게 한다." },
+                                { index: "3.", answer: "주어진 영역의 넓이를 직사각형 넓이의 합의 극한으로 나타내 봄으로써 정적분과 급수의 합 사이의 관계를 이해할 수 있게 한다." },
+                                { index: "4.", answer: "정적분과 급수의 합 사이의 관계를 다룰 때, 공학 도구를 이용할 수 있다." },
+                                { index: "5.", answer: "여러 가지 적분법과 정적분의 활용에서 지나치게 복잡한 문제는 다루지 않는다." },
+                                { index: "6.", answer: "‘구분구적법’ 용어는 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        },
+                    ]
+                }
+            ]
+        },
+        tab11: {
+            title: "기하",
+            pages: [
+                {
+                    pageName: "내용체계 표",
+                    type: "image",
+                    description: "기하 내용체계 표",
+                    imageUrl: "11.png"
+                },
+                {
+                    pageName: "성취기준",
+                    type: "exam",
+                    subtitle: "기하 성취기준",
+                    subsections: [
+                        {
+                            subTitle: "1. 이차곡선",
+                            questions: [
+                                { index: "[12기하01-01]", answer: " 포물선의 뜻을 알고, 포물선을 방정식으로 표현할 수 있다." },
+                                { index: "[12기하01-02]", answer: " 타원의 뜻을 알고, 타원을 방정식으로 표현할 수 있다."},
+                                { index: "[12기하01-03]", answer: " 쌍곡선의 뜻을 알고, 쌍곡선을 방정식으로 표현할 수 있다." },
+                                { index: "[12기하01-04]", answer: " 이차곡선의 접선의 방정식을 구할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "2. 공간도형과 공간좌표",
+                            questions: [
+                                { index: "[12기하02-01]", answer: " 직선과 직선, 직선과 평면, 평면과 평면의 위치 관계에 대한 간단한 증명을 할 수 있다." },
+                                { index: "[12기하02-02]", answer: " 삼수선 정리를 이해하고, 이를 활용하여 문제를 해결할 수 있다." },
+                                { index: "[12기하02-03]", answer: " 도형의 정사영의 뜻을 알고, 도형과 정사영의 관계를 탐구할 수 있다." },
+                                { index: "[12기하02-04]", answer: " 좌표공간에서 두 점 사이의 거리와 선분의 내분점의 좌표를 구할 수 있다." },
+                                { index: "[12기하02-05]", answer: " 구를 방정식으로 표현할 수 있다." },
+                            ]
+                        },
+                        {
+                            subTitle: "3. 벡터",
+                            questions: [
+                                { index: "[12기하03-01]", answer: " 벡터의 뜻을 알고, 벡터의 덧셈, 뺄셈, 실수배를 할 수 있다." },
+                                { index: "[12기하03-02]", answer: " 위치벡터의 뜻을 알고, 벡터와 좌표를 대응시켜 표현할 수 있다." },
+                                { index: "[12기하03-03]", answer: " 내적의 뜻을 알고, 두 벡터의 내적을 구할 수 있다." },
+                                { index: "[12기하03-04]", answer: " 벡터를 이용하여 직선의 방정식을 구할 수 있다." },
+                                { index: "[12기하03-05]", answer: " 좌표공간에서 벡터를 이용하여 평면의 방정식과 구의 방정식을 구할 수 있다." },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "성취기준 해설, 적용 시 고려사항",
+                    type: "exam",
+                    subtitle: "기하 성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "기하 성취기준 해설",
+                            questions: [
+                                { index: "[12기하01-04]", answer: " 이차곡선의 접선의 방정식은 이차방정식의 판별식을 이용하여 구하게 한다." },
+                                { index: "[12기하02-04]", answer: " 좌표공간에서 점의 좌표를 구하는 원리를 이해하고, 두 점 사이의 거리와 내분점의 좌표가 구성되는 원리를 좌표공간으로 확장하게 한다. 평면에서 공간으로 차원을 확장하는 것에 대해 흥미를 갖게 한다." },
+                                { index: "[12기하03-02]", answer: " 벡터를 표현하고 탐구하는 방법에는 화살표를 이용한 기하적 방법과 좌표를 이용한 대수적 방법이 있음을 인식하게 한다." },
+                                { index: "[12기하03-04]", answer: " 좌표평면과 좌표공간에서 직선을 벡터를 이용한 방정식으로 간결하게 표현할 수 있음을 알게 한다." },
+                                { index: "[12기하03-05]", answer: " 좌표공간에서 평면과 구를 벡터를 이용한 방정식으로 간결하게 표현할 수 있음을 알게 한다." },
+                            ]
+                        },
+                        {
+                            subTitle: "(1) 이차곡선 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘이차곡선’ 영역에서는 용어와 기호로 ‘이차곡선, 포물선(축, 꼭짓점, 초점, 준선), 타원(초점, 꼭짓점, 중심, 장축, 단축), 쌍곡선(초점, 꼭짓점, 중심, 주축, 점근선)’을 다룬다." },
+                                { index: "2.", answer: "이차곡선은 축이 x축, y축, x축 또는 y축에 평행인 것만 다룬다." },
+                                { index: "3.", answer: "이심률을 이용한 정의는 다루지 않는다." },
+                                { index: "4.", answer: "이차곡선과 직선과의 관계는 접하는 경우만 다룬다." },
+                                { index: "5.", answer: "평행이동한 이차곡선의 접선의 방정식은 다루지 않는다." },
+                                { index: "6.", answer: "이차곡선을 방정식으로 표현하도록 하고, 방정식에서 이차곡선의 특징을 찾도록 함으로써 이차곡선과 방정식의 연결성을 인식하게 한다." },
+                                { index: "7.", answer: "<미적분Ⅱ>를 이수한 학생에게는 음함수의 미분법을 이용하여 접선의 방정식을 설명할 수 있게 한다." },
+                                { index: "8.", answer: "이차곡선의 그래프와 방정식 사이의 관계를 다룰 때 공학 도구를 이용할 수 있다." },
+                                { index: "9.", answer: "이차곡선이 활용되는 다양한 사례를 제시하여 이차곡선의 유용성을 인식하게 한다. " },
+                            ]
+                        },
+                        {
+                            subTitle: "(2) 공간도형과 공간좌표 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘공간도형과 공간좌표’ 영역에서는 용어와 기호로 ‘교선, 삼수선 정리, 이면각(변, 면, 크기), 정사영, 좌표공간, 공간좌표, P(x,y,z)’를 다룬다." },
+                                { index: "2.", answer: "공간도형의 성질은 관찰을 통해 직관적으로 이해한 후 증명하게 한다." },
+                                { index: "3.", answer: "공간도형의 성질과 위치 관계를 다룰 때 공학 도구를 이용할 수 있다." },
+                                { index: "4.", answer: "연역적으로 증명하는 과정을 통해 논리성을 추구하는 태도를 길러 민주 시민으로서의 소양을 함양하게 한다." },
+                                { index: "5.", answer: "공간좌표는 평면좌표를 확장하는 수준에서 간단히 다룬다. " },
+                            ]
+                        },
+                        {
+                            subTitle: "(3) 벡터 성취기준 적용 시 고려 사항",
+                            questions: [
+                                { index: "1.", answer: "‘벡터’ 영역에서는 용어와 기호로 ‘벡터, 시점, 종점, 벡터의 크기, 단위벡터, 영벡터, 실수배, 평면벡터, 공간벡터, 위치벡터, 벡터의 성분, 내적, 방향벡터, 법선벡터, [반직선AB], [반직선a], |[반직선a]|, [반직선a][반직선b]’를 다룬다." },
+                                { index: "2.", answer: "벡터는 평면벡터와 공간벡터를 다룬다." },
+                                { index: "3.", answer: "벡터를 활용하여 다양한 문제를 해결함으로써 벡터의 유용성을 인식하게 한다." },
+                                { index: "4.", answer: "평면도형과 공간도형을 다룰 때 공학 도구를 이용할 수 있다." },
+                                { index: "5.", answer: "벡터를 이용한 도형의 방정식은 도형을 벡터로 표현할 수 있음을 이해하는 수준에서 다루고, 지나치게 복잡한 공간지각력을 요구하는 문제는 다루지 않는다." },
+                                { index: "6.", answer: "‘벡터방정식’ 용어는 교수⋅학습 상황에서 사용할 수 있다." },
+                            ]
+                        },
+                    ]
+                }
+            ]
+        },
+        tab12: {
+            title: "주요 사항",
+            pages: [
+                {
+                    pageName: "공통수학 1,2",
+                    type: "exam",
+                    subtitle: "성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "● 공통수학 1 (1) 다항식",
+                            questions: [
+                                { index: "1", answer: "다항식의 곱셈과 인수분해는 중학교에서 학습한 내용을 토대로 고등학교에서 추가된 내용을 이해하게 하고, 복잡한 인수분해 문제는 다루지 않는다" },
+                                { index: "2", answer: "조립제법은 중학교에서 학습한 다항식을 단항식으로 나누는 연산과 연계하여 이해하게 하고, 구체적인 예를 통하여 그 방법을 간단히 다룬다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 공통수학 1 (2) 방정식과 부등식",
+                            questions: [
+                                { index: "[10공수1-02-02]", answer: " 이차방정식은 계수가 실수인 경우만 다루고, 이차방정식은 복소수 범위에서 항상 근을 갖는다는 것을 이해하게 한다" },
+                                { index: "[10공수1-02-06]", answer: " 이차함수의 최대, 최소는 제한된 범위에서만 다룬다" },
+                                { index: "[10공수1-02-08]", answer: " 미지수가 2개인 연립이차방정식은 일차식과 이차식이 각각 한 개씩 주어진 경우, 두 이차식 중 한 이차식이 간단히 인수분해 되는 경우만 다룬다." },                                
+                                { index: "1", answer: "복소수의 성질과 사칙연산은 중학교에서 학습한 실수의 성질과 사칙연산과 연계하여 이해하게 하고, 나눗셈은 켤레복소수를 이용하여 계산하게 한다" },
+                                { index: "2", answer: "이차함수의 그래프와 x축 및 직선의 위치 관계, 이차함수의 최대, 최소를 탐구할 때 공학 도구를 이용할 수 있다" },
+                                { index: "3", answer: "연립부등식은 중학교에서 학습한 연립일차방정식 내용을 토대로 이해하게 한다" },
+                                { index: "4", answer: "이차함수의 그래프를 활용하여 이차부등식과 연립이차부등식의 해를 탐구할 때 공학 도구를 이용할 수 있다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 공통수학 1 (3) 경우의 수",
+                            questions: [
+                                { index: "1", answer: "중학교에서 학습한 경우의 수와 연계하여 합의 법칙과 곱의 법칙을 간단히 다룬다" },
+                                { index: "2", answer: "합의 법칙과 곱의 법칙은 구체적인 예를 통하여 이해하게 하고, 이들이 적용되는 상황의 차이점을 설명할 수 있게 한다" },
+                                { index: "3", answer: "순열의 수와 조합의 수는 직접 나열하거나 수형도를 이용하는 등 다양한 방법으로 구하게 하고, 지나치게 복잡한 문제는 다루지 않는다" },
+                                { index: "4", answer: "순열의 수와 조합의 수를 구해 보는 경험을 통해 체계적으로 사고하여 합리적으로 의사결정하는 태도를 기르게 한다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 공통수학 1 (4) 행렬",
+                            questions: [
+                                { index: "[10공수1-04-02] ", answer: " 행렬의 연산에서는 행렬의 덧셈, 뺄셈, 실수배 및 곱셈을 다루고, 행과 열의 수가 각각 2를 넘지 않는 범위에서 행렬의 곱셈을 할 수 있게 한다" },
+                                { index: "1", answer: "실생활 자료를 직사각형 모양으로 나타낼 수 있는 경우를 찾아보는 활동을 통해 행렬의 유용성을 인식하게 한다" },
+                                { index: "2", answer: "행렬의 연산에 관한 대수적 구조의 성질을 일반화하여 법칙으로 다루지 않으며, 지나치게 복잡한 행렬의 연산 문제는 다루지 않는다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 공통수학 2 (1) 도형의 방정식",
+                            questions: [
+                                { index: "[10공수2-01-01]", answer: " 선분의 내분을 도입하기 전에 두 점 사이의 거리를 구하는 방법을 다루고, 내분은 수직선 위에서, 좌표평면 위에서 구할 수 있도록 점차 확장하여 다룬다" },
+                                { index: "1", answer: "도형의 방정식 학습을 통해 대수와 기하를 연결하는 사고의 전환으로 수학에 대한 흥미와 관심을 갖도록 다양한 교수·학습 경험을 제공한다" },
+                                { index: "2", answer: "두 직선의 평행 조건과 수직 조건은 중학교에서 학습한 일차방정식과 일차함수의 그래프, 직선의 방정식과 연계하여 다룰 수 있다" },
+                                { index: "3", answer: "직선의 방정식, 원의 방정식, 도형의 이동을 다룰 때 공학 도구를 이용할 수 있다" },
+                            ]
+                        },
+                                                {
+                            subTitle: "● 공통수학 2 (2) 집합과 명제",
+                            questions: [
+                                { index: "[10공수2-02-07]", answer: " 대우를 이용한 증명법과 귀류법을 이용한 명제의 증명은 간단한 것만 다룬다." },
+                                { index: "1", answer: "증명을 지도할 때는 직관적인 이해로부터 시작하여 점진적으로 형식화하게 한다" },
+                            ]
+                        },
+                                                {
+                            subTitle: "● 공통수학 2 (3) 함수와 그래프",
+                            questions: [
+                                { index: "[10공수2-03-01]", answer: " 함수의 개념은 중학교에서 학습한 내용을 확장하여 주어진 두 집합 사이의 대응 관계로 이해하게 한다" },
+                                { index: "1", answer: "함수의 그래프를 그리고 여러 가지 성질을 탐구할 때 공학 도구를 이용할 수 있다" },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "대수, 확통",
+                    type: "exam",
+                    subtitle: "성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "● 대수 (1) 지수함수와 로그함수",
+                            questions: [
+                                { index: "[12대수01-02]", answer: " 지수가 유리수 및 실수인 경우는 밑이 양수인 조건이 필요함을 이해하게 한다. 지수가 실수인 경우는 직관적으로 다룬다" },
+                                { index: "[12대수01-04]", answer: " 로그의 성질은 지수의 성질과 관련지어 이해하게 한다" },
+                                { index: "[12대수01-07]", answer: " 지수함수와 로그함수는 역함수 관계임을 그래프를 통해 확인하게 한다" },
+                                { index: "1.", answer: "지수함수와 로그함수의 그래프를 그리고 여러 가지 성질을 탐구할 때 공학 도구를 이용할 수 있다" },
+                                { index: "2.", answer: "지수함수와 로그함수의 그래프를 그리고 여러 가지 성질을 탐구할 때, 지나치게 복잡한 문제는 다루지 않는다" },
+                                { index: "3.", answer: "지수함수와 로그함수의 그래프를 그리고 여러 가지 성질을 탐구할 때, 지수함수와 로그함수의 그래프를 그리고 여러 가지 성질을 탐구할 때 공학 도구를 이용할 수 있다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 대수 (2) 삼각함수",
+                            questions: [
+                                { index: "[12대수02-02] ", answer: " 삼각함수의 개념은 중학교에서 학습한 삼각비와 연계하여 이해하게 하며, 삼각함수의 성질은 삼각함수의 그래프의 성질을 이해하는 데 필요한 정도로 간단히 다룬다" },
+                                { index: "[12대수02-03]", answer: " 사인법칙과 코사인법칙을 이용하여 삼각형의 각의 크기와 변의 길이 사이의 관계를 이해하고 삼각형의 넓이를 다양한 방법으로 구할 수 있게 한다. " },
+                            ]
+                        },
+                        {
+                            subTitle: "● 대수 (3) 수열",
+                            questions: [
+                                { index: "[12대수03-05]", answer: " 여러 가지 수열의 합에서는 자연수의 거듭제곱의 합 sum _{k=1} ^{n} k, sum _{k=1} ^{n} k^2, sum _{k=1} ^{n} k^3 과 수열의 합이 간단한 것만 다룬다." },
+                                { index: "[12대수03-07]", answer: " 수학적 귀납법을 이용한 증명은 원리를 이해할 수 있는 정도로 간단히 다룬다" },
+                                { index: "1.", answer: "수열과 관련된 여러 가지 문제를 귀납적으로 표현할 수 있게 하고, 귀납적으로 정의된 수열의 일반항을 구하는 문제는 다루지 않는다" },
+                                { index: "2.", answer: "수학적 귀납법을 이용하여 명제를 증명하는 과정을 통해 논리적으로 사고하는 태도를 기르게 한다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 확률과 통계 (1) 경우의 수",
+                            questions: [
+                                { index: "[12확통01-01]", answer: " 중복순열, 같은 것이 있는 순열, 중복조합 등을 이해하는 과정에서 필요한 경우, <공통수학1>의 경우의 수와 연계되는 내용은 간단히 다룰 수 있다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 확률과 통계 (2) 확률",
+                            questions: [
+                                { index: "[12확통02-01] ", answer: " 확률 개념을 도입할 때 수학적 확률과 통계적 확률을 사용하며, 중학교에서 학습한 확률과 연계되는 내용은 필요한 경우에만 간단히 다룬다" },
+                                { index: "1.", answer: "통계적 확률과 수학적 확률의 관계를 이해하고 통계적 확률을 다룰 때 충분히 많은 횟수의 시행을 구현하기 위하여 공학 도구를 이용할 수 있다" },
+                                { index: "2.", answer: "조건부확률은 조건이 주어진 상황에서의 가능성을 수치화한 확률로 이해하게 하고, 사건의 시간적 순서나 인과관계로 해석하지 않도록 한다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 확률과 통계 (3) 통계",
+                            questions: [
+                                { index: "[12확통03-05]", answer: " 표본추출이 모집단의 성질을 예측하는 기본조건임을 이해하게 한다. 표본의 추출 방법을 임의추출로 제한하고 구체적인 예로 간단히 다룬다" },
+                                { index: "[12확통03-07]", answer: " 공학 도구를 이용하여 실생활 자료에서 모평균 또는 모비율을 추정하고, 그 결과를 해석하는 과정을 통해 유용성을 인식할 수 있다" },
+                                { index: "1.", answer: "모집단의 설정, 표본추출, 모평균 또는 모비율의 추정과 그 결과의 해석을 평가할 때는 통계적 문제해결에 기반한 평가를 할 수 있다" },
+                            ]
+                        },
+                    ]
+                },
+                {
+                    pageName: "미적분",
+                    type: "exam",
+                    subtitle: "성취기준 해설, 적용 시 고려사항",
+                    subsections: [
+                        {
+                            subTitle: "● 미적분 Ⅰ (1) 함수의 극한과 연속",
+                            questions: [
+                                { index: "[9수01-01]", answer: "함수의 극한과 연속에 대한 뜻과 성질을 그래프를 통해 직관적으로 이해하게 하고, 이때 공학 도구를 이용할 수 있다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 미적분 Ⅰ (2) 미분",
+                            questions: [
+                                { index: "[12미적Ⅰ-02-01]", answer: " 미분계수의 뜻을 알고, 그 기하학적 의미를 이해하게 한다" },
+                                { index: "1.", answer: "미분계수의 기하적 의미를 다룰 때 공학 도구를 이용할 수 있다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 미적분 Ⅰ (3) 적분",
+                            questions: [
+                                { index: "[12미적Ⅰ-03-04]", answer: " 부정적분과 정적분의 관계를 이해하고, 다항함수의 정적분을 구할 수 있다" },
+                                { index: "[12미적Ⅰ-03-03]", answer: " 닫힌구간 [a,b]에서 연속함수 f(x)의 함숫값이 음이 아닌 경우 함수 f(x)의 그래프와 x축으로 둘러싸인 도형의 넓이를 f(x)의 a에서 b까지의 정적분이라 하고, 이를 일반적인 연속함수에 대한 정적분의 정의로 확장한다." },
+                            ]
+                        },
+                        {
+                            subTitle: "● 미적분 Ⅱ (1) 수열의 극한",
+                            questions: [
+                                { index: "1.", answer: "수열이나 급수의 수렴, 발산을 다룰 때 공학 도구를 이용할 수 있다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 미적분 Ⅱ (2) 미분법",
+                            questions: [
+                                { index: "1.", answer: "구체적인 자연 현상이나 사회 현상을 도함수를 통해 이해하게 함으로써 미분의 유용성과 가치를 인식하게 한다" },
+                            ]
+                        },
+                        {
+                            subTitle: "● 미적분 Ⅱ (3) 적분법",
+                            questions: [
+                                { index: "1.", answer: "주어진 영역의 넓이를 직사각형 넓이의 합의 극한으로 나타내 봄으로써 정적분과 급수의 합 사이의 관계를 이해할 수 있게 한다" },
+                                { index: "2.", answer: "정적분과 급수의 합 사이의 관계를 다룰 때, 공학 도구를 이용할 수 있다" },
+                            ]
+                        },
+                    ]
+                },
+            ]
+        },
+    };
+
+    // 화면 초기화 및 자동 렌더링
+    window.addEventListener('DOMContentLoaded', () => {
+        const tabMenu = document.getElementById('tabMenu');
+        const container = document.getElementById('tabContentContainer');
+
+        let isFirstTab = true;
+
+        for (const [tabKey, tabVal] of Object.entries(studyData)) {
+            // 1. 1단계 Title 탭 버튼 생성
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${isFirstTab ? 'active' : ''}`;
+            btn.textContent = tabVal.title;
+            btn.onclick = (e) => switchTab(e, tabKey);
+            tabMenu.appendChild(btn);
+
+            // 2. 1단계 Title 컨텐츠 박스 생성
+            const tabDiv = document.createElement('div');
+            tabDiv.id = tabKey;
+            tabDiv.className = `tab-content ${isFirstTab ? 'active' : ''}`;
+
+            // 2단계 영역(Sub Tab) 메뉴바 생성
+            const subMenuDiv = document.createElement('div');
+            subMenuDiv.className = 'sub-tab-menu';
+            tabDiv.appendChild(subMenuDiv);
+
+            // 2단계 영역별 페이지 컨테이너 생성 영역
+            const pageContainerDiv = document.createElement('div');
+            tabDiv.appendChild(pageContainerDiv);
+
+            tabVal.pages.forEach((page, pageIdx) => {
+                const pageId = `${tabKey}_page${pageIdx}`;
+                
+                // 서브 탭 버튼 생성
+                const subBtn = document.createElement('button');
+                subBtn.className = `sub-tab-btn ${pageIdx === 0 ? 'active' : ''}`;
+                subBtn.textContent = page.pageName;
+                subBtn.onclick = (e) => switchSubTab(e, tabKey, pageId);
+                subMenuDiv.appendChild(subBtn);
+
+                // 페이지 섹션 생성
+                const pageSec = document.createElement('div');
+                pageSec.id = pageId;
+                pageSec.className = `page-section ${pageIdx === 0 ? 'active' : ''}`;
+
+                if (page.type === 'image') {
+                    // 이미지 첨부 페이지 렌더링
+                    pageSec.innerHTML = `
+                        <div class="image-page-container">
+                            <div class="image-desc">${page.description}</div>
+                            <img src="${page.imageUrl}" alt="학습 참고 이미지">
+                        </div>
+                    `;
+                } else if (page.type === 'exam') {
+                    // 시험(타이핑) 페이지 렌더링
+                    let examHtml = `
+                        <h2>${page.subtitle}</h2>
+                        <div class="mode-toggle">
+                            <button class="mode-btn" onclick="switchMode(this, 'memory')">📖 전체 내용 보기</button>
+                            <button class="mode-btn active" onclick="switchMode(this, 'practice')">✏️ 한 줄씩 암기</button>
+                            <button class="mode-btn" onclick="switchMode(this, 'exam')">📋 전체 시험보기</button>
+                        </div>
+                        <div class="memory-overview"></div>
+                        <div class="practice-section active"></div>
+                        <div class="exam-section"></div>
+                    `;
+                    pageSec.innerHTML = examHtml;
+
+                    const memoryOverview = pageSec.querySelector('.memory-overview');
+                    memoryOverview.innerHTML = `<h3>${page.subtitle} 전체 내용</h3>`;
+
+                    page.subsections.forEach(sub => {
+                        const section = document.createElement('div');
+                        section.className = 'memory-overview-section';
+                        section.innerHTML = `<h4>${sub.subTitle}</h4>`;
+
+                        sub.questions.forEach(q => {
+                            const item = document.createElement('div');
+                            item.className = 'memory-overview-item';
+                                    item.innerHTML = `<span class="memory-overview-index">${q.index}</span>${parseMathSymbols(q.answer)}`;
+                            section.appendChild(item);
+                        });
+
+                        memoryOverview.appendChild(section);
+                    });
+
+                    const practiceSec = pageSec.querySelector('.practice-section');
+                    const examSec = pageSec.querySelector('.exam-section');
+
+                    page.subsections.forEach(sub => {
+                        const pSubWrapper = document.createElement('div');
+                        pSubWrapper.innerHTML = `<div class="subsection-title">${sub.subTitle}</div>`;
+                        
+                        const eSubWrapper = document.createElement('div');
+                        eSubWrapper.innerHTML = `<div class="subsection-title"> ${sub.subTitle}</div>`;
+
+                        sub.questions.forEach(q => {
+                            pSubWrapper.appendChild(createQuestionBox(q.index, q.answer, 'practice'));
+                            eSubWrapper.appendChild(createQuestionBox(q.index, q.answer, 'exam'));
+                        });
+
+                        practiceSec.appendChild(pSubWrapper);
+                        examSec.appendChild(eSubWrapper);
+                    });
+
+                    // 시험 모드 하단 버튼 추가
+                    const examSubmitArea = document.createElement('div');
+                    examSubmitArea.className = 'exam-submit-area';
+                    examSubmitArea.innerHTML = `
+                        <button class="exam-submit-btn" onclick="evaluateExam(this)">전체 시험 제출 및 채점하기</button>
+                        <button class="capture-btn" onclick="captureScreen()">📸 결과 캡처 저장</button>
+                    `;
+                    examSec.appendChild(examSubmitArea);
+                }
+
+                pageContainerDiv.appendChild(pageSec);
+            });
+
+            container.appendChild(tabDiv);
+            isFirstTab = false;
+        }
+    });
+
+    // 공통 문제 박스 HTML 생성기
+    function createQuestionBox(index, answer, mode) {
+        const box = document.createElement('div');
+        box.className = 'question-box';
+        box.setAttribute('data-answer', answer);
+
+        let actionHtml = '';
+        if (mode === 'practice') {
+            actionHtml = `
+                <div class="btn-group">
+                    <button class="submit-btn" onclick="evaluateAnswer(this)">제출 및 채점</button>
+                    <button class="toggle-ans-btn" onclick="toggleAnswer(this)">정답 보기</button>
+                </div>
+            `;
+        }
+
+        box.innerHTML = `
+            <div class="question-index">${index}</div>
+            <div class="question-body">
+                <textarea class="user-input" placeholder="여기에 암기한 내용을 입력하세요."></textarea>
+                ${actionHtml}
+                <div class="result-container">
+                    <div class="result-label ans-label">정답:</div>
+                    <div class="result-text ans-view"></div>
+                    <div class="result-label">내 작성:</div>
+                    <div class="result-text user-view"></div>
+                </div>
+            </div>
+        `;
+        return box;
+    }
+
+    // 1단계 Title 탭 전환
+    function switchTab(evt, tabId) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    // 2단계 영역(Sub Tab) 전환
+    function switchSubTab(evt, tabKey, pageId) {
+        const tabContent = document.getElementById(tabKey);
+        tabContent.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+        tabContent.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(pageId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    // 모드 전환 (연습모드 <-> 시험모드)
+    function switchMode(btn, mode) {
+        const pageSection = btn.closest('.page-section');
+        pageSection.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const practiceSec = pageSection.querySelector('.practice-section');
+        const examSec = pageSection.querySelector('.exam-section');
+        const memoryOverview = pageSection.querySelector('.memory-overview');
+
+        memoryOverview.classList.toggle('active', mode === 'memory');
+        practiceSec.classList.toggle('active', mode === 'practice');
+        examSec.classList.toggle('active', mode === 'exam');
+    }
+
+    // 텍스트 비교 알고리즘 (띄어쓰기 및 가운데점 예외 처리)
+    function parseMathSymbols(text) {
+        if (!text) return '';
+        return text
+            .replace(/\{([^{}]+)\}\s+over\s+\{([^{}]+)\}/g, '<span class="math-fraction"><span class="numerator">$1</span><span class="denominator">$2</span></span>')
+            .replace(/root\s+\{([^{}]+)\}\s+of\s+\{([^{}]+)\}/g, '<span class="math-root"><span class="root-index">$1</span><span class="root-symbol">&radic;</span><span class="root-radicand">$2</span></span>')
+            .replace(/sqrt\s+\{([^{}~]+)~?\}/g, '<span class="math-sqrt">$1</span>')
+            .replace(/sum\s+_\{([^}]+)\}\s*\^\{([^}]+)\}/g, '<span class="math-sum"><span class="sum-upper">$2</span><span class="sum-symbol">&Sigma;</span><span class="sum-lower">$1</span></span>')
+            .replace(/lim\s*_\{([^}]+)\}/g, (_, limit) => `<span class="math-limit"><span class="limit-symbol">lim</span><span class="limit-value">${limit.replace(/`/g, '').replace(/->/g, '&rarr;')}</span></span>`)
+            .replace(/int\s*_\{([^}]*)\}\s*\^\{([^}]*)\}\s*\{\}\s*([^`]+)`dx/g, '<span class="math-integral"><span class="integral-symbol">&int;</span><span class="integral-limits"><span class="integral-upper">$2</span><span class="integral-lower">$1</span></span></span>$3dx')
+            .replace(/LEFT\s*\[\s*([^`]+)`\s*RIGHT\s*\]\s*_\{([^}]+)\}\s*\^\{([^}]+)\}/g, '<span class="math-evaluation"><span>[$1]</span><span class="evaluation-limits"><span class="evaluation-upper">$3</span><span class="evaluation-lower">$2</span></span></span>')
+            .replace(/\{\}\s*_\{([^}]+)\}\s*SMALLPROD\s*_\{([^}]+)\}/g, '<span class="math-operator"><span class="operator-left">$1</span><span class="operator-symbol">Π</span><span class="operator-right">$2</span></span>')
+            .replace(/\{\}\s*_\{([^}]+)\}\s*rm\s*H\s*it\s*rm\s*_\{([^}]+)\}/g, '<span class="math-operator"><span class="operator-left">$1</span><span class="operator-symbol">H</span><span class="operator-right">$2</span></span>')
+            .replace(/bar\s*\{([^{}]*?)[`]*\}/g, '<span class="math-overline">$1</span>')
+            .replace(/hat\s*\{([^{}]+)\}/g, '<span class="math-hat">$1</span>')
+            .replace(/\[직선([A-Za-z가-힣0-9]+)\]/g, '<span class="math-overleftrightarrow">$1</span>')
+            .replace(/\[반직선([A-Za-z가-힣0-9]+)\]/g, '<span class="math-overrightarrow">$1</span>')
+            .replace(/\[선분([A-Za-z가-힣0-9]+)\]/g, '<span class="math-overline">$1</span>')
+            .replace(/\[켤레([^\]]+)\]/g, '<span class="math-overline">$1</span>')
+            .replace(/↔([A-Za-z가-힣0-9]+)/g, '<span class="math-overleftrightarrow">$1</span>')
+            .replace(/→([A-Za-z가-힣0-9]+)/g, '<span class="math-overrightarrow">$1</span>')
+            .replace(/―([A-Za-z가-힣0-9]+)/g, '<span class="math-overline">$1</span>')
+            .replace(/_\{([^}]+)\}\s*([PC])\s*_\{([^}]+)\}/g, '<sub>$1</sub>$2<sub>$3</sub>')
+            .replace(/([A-Za-z가-힣0-9])_([A-Za-z가-힣0-9]+)/g, '$1<sub>$2</sub>')
+            .replace(/\^(-?[A-Za-z가-힣0-9]+)/g, '<sup style="font-size: 0.75em; vertical-align: super;">$1</sup>');
+    }
+
+// 1. 단어 내 글자 단위 차이 계산 (새로 추가)
+    function getCharLevenshtein(s1, s2) {
+        const m = s1.length, n = s2.length;
+        const dp = Array.from(Array(m + 1), () => Array(n + 1).fill(0));
+        for (let i = 0; i <= m; i++) dp[i][0] = i;
+        for (let j = 0; j <= n; j++) dp[0][j] = j;
+        for (let i = 1; i <= m; i++) {
+            for (let j = 1; j <= n; j++) {
+                const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+                dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+            }
+        }
+        return dp[m][n];
+    }
+
+    // 2. 단어 내 오타 부분 시각화 (새로 추가)
+    function compareWordChars(normC, uWord) {
+        let wordHtml = '';
+        let uIdx = 0;
+        const specialChars = /^[⋅·,'‘’°^]$/;
+
+        for (let j = 0; j < uWord.length; j++) {
+            let char = uWord[j];
+            if (specialChars.test(char)) {
+                wordHtml += `<span class="char-correct">${char}</span>`;
+                continue;
+            }
+            if (uIdx < normC.length) {
+                while (uIdx < normC.length && specialChars.test(normC[uIdx])) {
+                    uIdx++;
+                }
+                if (uIdx < normC.length && char === normC[uIdx]) {
+                    wordHtml += `<span class="char-correct">${char}</span>`;
+                } else {
+                    wordHtml += `<span class="char-incorrect">${char}</span>`;
+                }
+                uIdx++;
+            } else {
+                wordHtml += `<span class="char-incorrect">${char}</span>`;
+            }
+        }
+        return wordHtml;
+    }
+
+    // 3. 텍스트 비교 알고리즘 (기존 compareText 함수 교체)
+    function compareText(correctAnswer, userInput) {
+        // 기존 기호 정규식 처리
+        let cleanCorrectRaw = correctAnswer.replace(/\[(직선\vert{}반직선\vert{}선분\vert{}호\vert{}켤레)([A-Za-z가-힣0-9]+)\]/g, '$2');
+            
+        const correctWords = cleanCorrectRaw.trim().split(/\s+/).filter(w => w.length > 0);
+        const userWords = userInput.trim().split(/\s+/).filter(w => w.length > 0);
+
+        if (userWords.length === 0) {
+            return correctWords.map(w => `<span class="char-missing">${w}</span>`).join(' ');
+        }
+
+        const n = correctWords.length;
+        const m = userWords.length;
+        const dp = Array.from(Array(n + 1), () => Array(m + 1).fill(0));
+
+        const replaceRegex = /[⋅·,'‘’°^]+/g;
+
+        for (let i = 1; i <= n; i++) dp[i][0] = dp[i - 1][0] + correctWords[i - 1].replace(replaceRegex, '').length;
+        for (let j = 1; j <= m; j++) dp[0][j] = dp[0][j - 1] + userWords[j - 1].replace(replaceRegex, '').length;
+
+        for (let i = 1; i <= n; i++) {
+            for (let j = 1; j <= m; j++) {
+                const cwNorm = correctWords[i - 1].replace(replaceRegex, '');
+                const uwNorm = userWords[j - 1].replace(replaceRegex, '');
+
+                const subCost = getCharLevenshtein(cwNorm, uwNorm);
+                const maxAllowedSubCost = Math.ceil(Math.max(cwNorm.length, uwNorm.length) * 0.5);
+                const effectiveSubCost = subCost <= maxAllowedSubCost ? subCost : cwNorm.length + uwNorm.length;
+
+                dp[i][j] = Math.min(
+                    dp[i - 1][j] + cwNorm.length,       
+                    dp[i][j - 1] + uwNorm.length,       
+                    dp[i - 1][j - 1] + effectiveSubCost 
+                );
+            }
+        }
+
+        let i = n, j = m;
+        const ops = [];
+        while (i > 0 || j > 0) {
+            if (i > 0 && j > 0) {
+                const cwNorm = correctWords[i - 1].replace(replaceRegex, '');
+                const uwNorm = userWords[j - 1].replace(replaceRegex, '');
+                const subCost = getCharLevenshtein(cwNorm, uwNorm);
+                const maxAllowedSubCost = Math.ceil(Math.max(cwNorm.length, uwNorm.length) * 0.5);
+                const effectiveSubCost = subCost <= maxAllowedSubCost ? subCost : cwNorm.length + uwNorm.length;
+
+                const costSub = dp[i - 1][j - 1] + effectiveSubCost;
+                
+                if (dp[i][j] === costSub && effectiveSubCost < cwNorm.length + uwNorm.length) {
+                    ops.unshift({ type: cwNorm === uwNorm ? 'match' : 'sub', cIdx: i - 1, uIdx: j - 1 });
+                    i--; j--;
+                    continue;
+                }
+            }
+            if (i > 0 && (j === 0 || dp[i][j] === dp[i - 1][j] + correctWords[i - 1].replace(replaceRegex, '').length)) {
+                ops.unshift({ type: 'delete', cIdx: i - 1 });
+                i--;
+            } else {
+                ops.unshift({ type: 'insert', uIdx: j - 1 });
+                j--;
+            }
+        }
+
+        let resultHtml = '';
+        for (let idx = 0; idx < ops.length; idx++) {
+            const op = ops[idx];
+            if (idx > 0) resultHtml += ' ';
+
+            if (op.type === 'match') {
+                resultHtml += `<span class="char-correct">${userWords[op.uIdx]}</span>`;
+            } else if (op.type === 'sub') {
+                const cwNorm = correctWords[op.cIdx].replace(replaceRegex, '');
+                resultHtml += compareWordChars(cwNorm, userWords[op.uIdx]);
+            } else if (op.type === 'insert') {
+                resultHtml += `<span class="char-incorrect">${userWords[op.uIdx]}</span>`;
+            } else if (op.type === 'delete') {
+                resultHtml += `<span class="char-missing">${correctWords[op.cIdx]}</span>`;
+            }
+        }
+
+        return resultHtml;
+    }
+
+    // 한 줄 채점
+    function evaluateAnswer(btn) {
+        const questionBox = btn.closest('.question-box');
+        const correctAnswer = questionBox.getAttribute('data-answer');
+        const userInput = questionBox.querySelector('.user-input').value;
+        const resultContainer = questionBox.querySelector('.result-container');
+        const ansView = questionBox.querySelector('.ans-view');
+        const userView = questionBox.querySelector('.user-view');
+        const toggleBtn = questionBox.querySelector('.toggle-ans-btn');
+
+        resultContainer.style.display = 'grid';
+        ansView.innerHTML = parseMathSymbols(correctAnswer);
+        userView.innerHTML = compareText(correctAnswer, userInput);
+        
+        toggleBtn.style.display = 'inline-block';
+        toggleBtn.textContent = '정답 숨기기';
+        toggleBtn.style.backgroundColor = '#64748b';
+    }
+
+    // 결과 칸 숨기기/보기 토글 기능
+    function toggleAnswer(btn) {
+        const questionBox = btn.closest('.question-box');
+        const resultContainer = questionBox.querySelector('.result-container');
+        const ansView = questionBox.querySelector('.ans-view');
+        
+        if (resultContainer.style.display === 'grid') {
+            resultContainer.style.display = 'none';
+            btn.textContent = '정답 보기';
+            btn.style.backgroundColor = '#0284c7';
+        } else {
+            ansView.innerHTML = parseMathSymbols(questionBox.getAttribute('data-answer'));
+            resultContainer.style.display = 'grid';
+            btn.textContent = '정답 숨기기';
+            btn.style.backgroundColor = '#64748b';
+        }
+    }
+
+    // 전체 시험 채점
+    function evaluateExam(btn) {
+        const examSection = btn.closest('.exam-section');
+        const questionBoxes = examSection.querySelectorAll('.question-box');
+
+        questionBoxes.forEach(box => {
+            const correctAnswer = box.getAttribute('data-answer');
+            const userInput = box.querySelector('.user-input').value;
+            const resultContainer = box.querySelector('.result-container');
+            const ansView = box.querySelector('.ans-view');
+            const userView = box.querySelector('.user-view');
+
+            resultContainer.style.display = 'grid';
+            ansView.innerHTML = parseMathSymbols(correctAnswer);
+            userView.innerHTML = compareText(correctAnswer, userInput);
+        });
+    }
+
+// 화면 캡처 저장 (아이폰/아이패드 호환 버전)
+    function captureScreen() {
+        const targetElement = document.getElementById('captureArea');
+        html2canvas(targetElement, { 
+            scale: 2,
+            useCORS: true 
+        }).then(canvas => {
+            canvas.toBlob(blob => {
+                const file = new File([blob], 'memorize_result.png', { type: 'image/png' });
+                
+                // 모바일 환경: 공유 시트 띄우기
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    navigator.share({
+                        files: [file],
+                        title: '암기 학습 결과',
+                        text: '나의 암기 학습 결과를 확인해 보세요!'
+                    }).catch(error => console.log('공유 취소 또는 실패:', error));
+                } 
+                // PC 환경: 기존 다운로드 방식
+                else {
+                    const link = document.createElement('a');
+                    link.download = 'memorize_result.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                }
+            }, 'image/png');
+        }).catch(err => {
+            alert('이미지 캡처 중 오류가 발생했습니다.');
+            console.error(err);
+        });
+    }
+</script>
+
+</body>
+</html>
