@@ -891,29 +891,14 @@
         });
     }
 
-// 화면 캡처 저장 (모바일 호환 버전)
+    // 화면 캡처 저장
     function captureScreen() {
         const targetElement = document.getElementById('captureArea');
-        html2canvas(targetElement, { 
-            scale: 2,
-            useCORS: true 
-        }).then(canvas => {
-            canvas.toBlob(blob => {
-                const file = new File([blob], 'memorize_result.png', { type: 'image/png' });
-                
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    navigator.share({
-                        files: [file],
-                        title: '암기 학습 결과',
-                        text: '나의 암기 학습 결과를 확인해 보세요!'
-                    }).catch(error => console.log('공유 취소 또는 실패:', error));
-                } else {
-                    const link = document.createElement('a');
-                    link.download = 'memorize_result.png';
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                }
-            }, 'image/png');
+        html2canvas(targetElement, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'memorize_result.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         });
     }
 </script>
